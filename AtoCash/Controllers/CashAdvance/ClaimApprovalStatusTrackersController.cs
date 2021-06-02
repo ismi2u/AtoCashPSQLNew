@@ -137,14 +137,7 @@ namespace AtoCash.Controllers
                 {
                     bRejectMessage = true;
                 }
-                //claimApprovalStatusTracker.Id = claimApprovalStatusTrackerDto.Id;
-                //claimApprovalStatusTracker.EmployeeId = claimApprovalStatusTrackerDto.EmployeeId;
-                //claimApprovalStatusTracker.PettyCashRequestId = claimApprovalStatusTrackerDto.PettyCashRequestId;
-                //claimApprovalStatusTracker.DepartmentId = claimApprovalStatusTrackerDto.DepartmentId;
-                //claimApprovalStatusTracker.ProjectId = claimApprovalStatusTrackerDto.ProjectId;
-                //claimApprovalStatusTracker.RoleId = claimApprovalStatusTrackerDto.RoleId;
-                //claimApprovalStatusTracker.ApprovalLevelId = claimApprovalStatusTrackerDto.ApprovalLevelId;
-                //claimApprovalStatusTracker.ReqDate = claimApprovalStatusTrackerDto.ReqDate;
+
                 claimApprovalStatusTracker.FinalApprovedDate = DateTime.Now;
                 claimApprovalStatusTracker.Comments = bRejectMessage ? claimApprovalStatusTrackerDto.Comments : "Approved";
 
@@ -221,6 +214,10 @@ namespace AtoCash.Controllers
                             int disbAndClaimItemId = _context.DisbursementsAndClaimsMasters.Where(d => d.PettyCashRequestId == claimitem.PettyCashRequestId).FirstOrDefault().Id;
                             var disbAndClaimItem = await _context.DisbursementsAndClaimsMasters.FindAsync(disbAndClaimItemId);
 
+                            disbAndClaimItem.ClaimAmount = pettyCashRequest.PettyClaimAmount;
+                            disbAndClaimItem.AmountToWallet = 0;
+                            disbAndClaimItem.AmountToCredit = bRejectMessage ? 0 : pettyCashRequest.PettyClaimAmount;
+                            disbAndClaimItem.IsSettledAmountCredited = false;
                             disbAndClaimItem.ApprovalStatusId = (int)EApprovalStatus.Approved;
                             _context.Update(disbAndClaimItem);
                         }
@@ -296,9 +293,10 @@ namespace AtoCash.Controllers
 
                         var disbursementsAndClaimsMaster = _context.DisbursementsAndClaimsMasters.Where(d => d.PettyCashRequestId == pettyCashReq.Id).FirstOrDefault();
                         disbursementsAndClaimsMaster.ApprovalStatusId = (int)EApprovalStatus.Rejected;
-                        disbursementsAndClaimsMaster.ClaimAmount = 0;
+                        disbursementsAndClaimsMaster.ClaimAmount = pettyCashReq.PettyClaimAmount;
                         disbursementsAndClaimsMaster.AmountToWallet = 0;
-                        disbursementsAndClaimsMaster.AmountToCredit = 0;
+                        disbursementsAndClaimsMaster.AmountToCredit = bRejectMessage ? 0 : pettyCashReq.PettyClaimAmount;
+                        disbursementsAndClaimsMaster.IsSettledAmountCredited = false;
                         _context.DisbursementsAndClaimsMasters.Update(disbursementsAndClaimsMaster);
                         await _context.SaveChangesAsync();
                     }
@@ -312,16 +310,7 @@ namespace AtoCash.Controllers
                     claimitem = _context.ClaimApprovalStatusTrackers.Where(c => c.PettyCashRequestId == claimApprovalStatusTracker.PettyCashRequestId &&
                                 c.ApprovalStatusTypeId == (int)EApprovalStatus.Pending).FirstOrDefault();
                     claimApprovalStatusTracker.ApprovalStatusTypeId = claimApprovalStatusTrackerDto.ApprovalStatusTypeId;
-                    //DisbursementAndClaimsMaster update the record to Approved (ApprovalStatusId
-                    int disbAndClaimItemId = _context.DisbursementsAndClaimsMasters.Where(d => d.PettyCashRequestId == claimitem.PettyCashRequestId).FirstOrDefault().Id;
-                    var disbAndClaimItem = await _context.DisbursementsAndClaimsMasters.FindAsync(disbAndClaimItemId);
 
-                    disbAndClaimItem.ApprovalStatusId = bRejectMessage ? (int)EApprovalStatus.Rejected : (int)EApprovalStatus.Approved;
-                    disbAndClaimItem.ClaimAmount = 0;
-                    disbAndClaimItem.AmountToWallet = 0;
-                    disbAndClaimItem.AmountToCredit = 0;
-                    _context.DisbursementsAndClaimsMasters.Update(disbAndClaimItem);
-                    _context.Update(disbAndClaimItem);
 
                     //Update Pettycashrequest table to update the record to Approved as the final approver has approved it.
                     int pettyCashReqId = _context.PettyCashRequests.Where(d => d.Id == claimitem.PettyCashRequestId).FirstOrDefault().Id;
@@ -340,6 +329,21 @@ namespace AtoCash.Controllers
                     pettyCashReq.ApprovedDate = DateTime.Now;
                     pettyCashReq.Comments = bRejectMessage ? claimApprovalStatusTrackerDto.Comments : "Approved";
                     _context.Update(pettyCashReq);
+
+
+                    //DisbursementAndClaimsMaster update the record to Approved (ApprovalStatusId
+                    int disbAndClaimItemId = _context.DisbursementsAndClaimsMasters.Where(d => d.PettyCashRequestId == claimitem.PettyCashRequestId).FirstOrDefault().Id;
+                    var disbAndClaimItem = await _context.DisbursementsAndClaimsMasters.FindAsync(disbAndClaimItemId);
+
+                    disbAndClaimItem.ApprovalStatusId = bRejectMessage ? (int)EApprovalStatus.Rejected : (int)EApprovalStatus.Approved;
+                    disbAndClaimItem.ClaimAmount = pettyCashReq.PettyClaimAmount;
+                    disbAndClaimItem.AmountToWallet = 0;
+                    disbAndClaimItem.AmountToCredit = bRejectMessage ? 0 : pettyCashReq.PettyClaimAmount;
+                    disbAndClaimItem.IsSettledAmountCredited = false;
+                    _context.DisbursementsAndClaimsMasters.Update(disbAndClaimItem);
+                    _context.Update(disbAndClaimItem);
+
+                    
 
                 }
 

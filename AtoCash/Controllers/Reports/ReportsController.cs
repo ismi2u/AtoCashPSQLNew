@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using LinqKit;
+using System.Data.Entity;
 
 namespace AtoCash.Controllers
 {
@@ -1002,6 +1003,166 @@ namespace AtoCash.Controllers
             return Ok(docUrls);
         }
 
+
+        [HttpGet]
+        [ActionName("GetAccountsPayableData")]
+        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> GetAccountsPayableData(bool IsSettled)
+        {
+            List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
+
+            var disbursementsAndClaimsMasters = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == IsSettled).ToListAsync();
+
+            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in disbursementsAndClaimsMasters)
+            {
+                DisbursementsAndClaimsMasterDTO disbursementsAndClaimsMasterDTO = new();
+
+                disbursementsAndClaimsMasterDTO.Id = disbursementsAndClaimsMaster.Id;
+                disbursementsAndClaimsMasterDTO.EmployeeId = disbursementsAndClaimsMaster.EmployeeId;
+                disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
+                disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
+                disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
+                disbursementsAndClaimsMasterDTO.Department = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
+                disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
+                disbursementsAndClaimsMasterDTO.ProjectName = disbursementsAndClaimsMaster.ProjectId != null ? _context.Projects.Find(disbursementsAndClaimsMaster.ProjectId).ProjectName : string.Empty;
+                disbursementsAndClaimsMasterDTO.SubProjectId = disbursementsAndClaimsMaster.SubProjectId;
+                disbursementsAndClaimsMasterDTO.SubProjectName = disbursementsAndClaimsMaster.SubProjectId != null ? _context.SubProjects.Find(disbursementsAndClaimsMaster.SubProjectId).SubProjectName : string.Empty;
+                disbursementsAndClaimsMasterDTO.WorkTaskId = disbursementsAndClaimsMaster.WorkTaskId;
+                disbursementsAndClaimsMasterDTO.WorkTaskName = disbursementsAndClaimsMaster.WorkTaskId != null ? _context.WorkTasks.Find(disbursementsAndClaimsMaster.WorkTaskId).TaskName : string.Empty;
+                disbursementsAndClaimsMasterDTO.CurrencyTypeId = disbursementsAndClaimsMaster.CurrencyTypeId;
+                disbursementsAndClaimsMasterDTO.CurrencyType = _context.CurrencyTypes.Find(disbursementsAndClaimsMaster.CurrencyTypeId).CurrencyCode;
+                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate;
+                disbursementsAndClaimsMasterDTO.ClaimAmount = disbursementsAndClaimsMaster.ClaimAmount;
+                disbursementsAndClaimsMasterDTO.AmountToWallet = disbursementsAndClaimsMaster.AmountToWallet;
+                disbursementsAndClaimsMasterDTO.AmountToCredit = disbursementsAndClaimsMaster.AmountToCredit;
+                disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disbursementsAndClaimsMaster.IsSettledAmountCredited ?? false;
+                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate;
+                disbursementsAndClaimsMasterDTO.SettlementComment = disbursementsAndClaimsMaster.SettlementComment;
+                disbursementsAndClaimsMasterDTO.SettlementAccount = disbursementsAndClaimsMaster.SettlementAccount;
+                disbursementsAndClaimsMasterDTO.SettlementBankCard = disbursementsAndClaimsMaster.SettlementBankCard;
+                disbursementsAndClaimsMasterDTO.AdditionalData = disbursementsAndClaimsMaster.AdditionalData;
+                disbursementsAndClaimsMasterDTO.CostCenterId = disbursementsAndClaimsMaster.CostCenterId;
+                disbursementsAndClaimsMasterDTO.ApprovalStatusId = disbursementsAndClaimsMaster.ApprovalStatusId;
+                disbursementsAndClaimsMasterDTO.ApprovalStatusType = _context.ApprovalStatusTypes.Find(disbursementsAndClaimsMaster.ApprovalStatusId).Status;
+
+
+                ListDisbursementsAndClaimsMasterDTO.Add(disbursementsAndClaimsMasterDTO);
+
+            }
+
+            return Ok(ListDisbursementsAndClaimsMasterDTO);
+        }
+
+        // GET: api/DisbursementsAndClaimsMasters
+        [HttpGet]
+        [ActionName("GetAccountsPayableReport")]
+        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> GetAccountsPayableReport(bool IsSettled)
+        {
+            List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
+
+            var disbursementsAndClaimsMasters = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == IsSettled).ToListAsync();
+
+            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in disbursementsAndClaimsMasters)
+            {
+                DisbursementsAndClaimsMasterDTO disbursementsAndClaimsMasterDTO = new();
+
+                disbursementsAndClaimsMasterDTO.Id = disbursementsAndClaimsMaster.Id;
+                disbursementsAndClaimsMasterDTO.EmployeeId = disbursementsAndClaimsMaster.EmployeeId;
+                disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
+                disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
+                disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
+                disbursementsAndClaimsMasterDTO.Department = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
+                disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
+                disbursementsAndClaimsMasterDTO.ProjectName = disbursementsAndClaimsMaster.ProjectId != null ? _context.Projects.Find(disbursementsAndClaimsMaster.ProjectId).ProjectName : string.Empty;
+                disbursementsAndClaimsMasterDTO.SubProjectId = disbursementsAndClaimsMaster.SubProjectId;
+                disbursementsAndClaimsMasterDTO.SubProjectName = disbursementsAndClaimsMaster.SubProjectId != null ? _context.SubProjects.Find(disbursementsAndClaimsMaster.SubProjectId).SubProjectName : string.Empty;
+                disbursementsAndClaimsMasterDTO.WorkTaskId = disbursementsAndClaimsMaster.WorkTaskId;
+                disbursementsAndClaimsMasterDTO.WorkTaskName = disbursementsAndClaimsMaster.WorkTaskId != null ? _context.WorkTasks.Find(disbursementsAndClaimsMaster.WorkTaskId).TaskName : string.Empty;
+                disbursementsAndClaimsMasterDTO.CurrencyTypeId = disbursementsAndClaimsMaster.CurrencyTypeId;
+                disbursementsAndClaimsMasterDTO.CurrencyType = _context.CurrencyTypes.Find(disbursementsAndClaimsMaster.CurrencyTypeId).CurrencyCode;
+                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate;
+                disbursementsAndClaimsMasterDTO.ClaimAmount = disbursementsAndClaimsMaster.ClaimAmount;
+                disbursementsAndClaimsMasterDTO.AmountToWallet = disbursementsAndClaimsMaster.AmountToWallet;
+                disbursementsAndClaimsMasterDTO.AmountToCredit = disbursementsAndClaimsMaster.AmountToCredit;
+                disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disbursementsAndClaimsMaster.IsSettledAmountCredited ?? false;
+                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate;
+                disbursementsAndClaimsMasterDTO.SettlementComment = disbursementsAndClaimsMaster.SettlementComment;
+                disbursementsAndClaimsMasterDTO.SettlementAccount = disbursementsAndClaimsMaster.SettlementAccount;
+                disbursementsAndClaimsMasterDTO.SettlementBankCard = disbursementsAndClaimsMaster.SettlementBankCard;
+                disbursementsAndClaimsMasterDTO.AdditionalData = disbursementsAndClaimsMaster.AdditionalData;
+                disbursementsAndClaimsMasterDTO.CostCenterId = disbursementsAndClaimsMaster.CostCenterId;
+                disbursementsAndClaimsMasterDTO.ApprovalStatusId = disbursementsAndClaimsMaster.ApprovalStatusId;
+                disbursementsAndClaimsMasterDTO.ApprovalStatusType = _context.ApprovalStatusTypes.Find(disbursementsAndClaimsMaster.ApprovalStatusId).Status;
+
+
+                ListDisbursementsAndClaimsMasterDTO.Add(disbursementsAndClaimsMasterDTO);
+
+            }
+
+
+            DataTable dt = new();
+            dt.Columns.AddRange(new DataColumn[21]
+                {
+                    //new DataColumn("Id", typeof(int)),
+                    new DataColumn("EmployeeName", typeof(string)),
+                    new DataColumn("PettyCashRequestId", typeof(int)),
+                    new DataColumn("ExpenseReimburseReqId", typeof(int)),
+                    new DataColumn("RequestType",typeof(string)),
+                    new DataColumn("Department",typeof(string)),
+                    new DataColumn("Project",typeof(string)),
+                    new DataColumn("SubProject", typeof(string)),
+                    new DataColumn("WorkTask",typeof(string)),
+                    new DataColumn("RecordDate",typeof(DateTime)),
+                    new DataColumn("CurrencyType",typeof(string)),
+                    new DataColumn("ClaimAmount", typeof(Double)),
+                    new DataColumn("AmountToWallet", typeof(Double)),
+                    new DataColumn("AmountToCredit", typeof(Double)),
+                    new DataColumn("CostCenter", typeof(string)),
+                    new DataColumn("ApprovalStatus", typeof(string)),
+                    new DataColumn("IsSettledAmountCredited", typeof(bool)),
+                    new DataColumn("SettledDate", typeof(DateTime)),
+                    new DataColumn("SettlementComment", typeof(string)),
+                    new DataColumn("SettlementAccount", typeof(DateTime)),
+                    new DataColumn("SettlementBankCard", typeof(DateTime)),
+                    new DataColumn("AdditionalData", typeof(DateTime))
+                });
+
+
+            foreach (var disbItem in ListDisbursementsAndClaimsMasterDTO)
+            {
+                dt.Rows.Add(
+                    disbItem.EmployeeName,
+                    disbItem.PettyCashRequestId,
+                    disbItem.ExpenseReimburseReqId,
+                    disbItem.RequestType,
+                    disbItem.Department,
+                    disbItem.ProjectName,
+                    disbItem.SubProjectName,
+                    disbItem.WorkTaskName,
+                    disbItem.RecordDate,
+                    disbItem.CurrencyType,
+                    disbItem.ClaimAmount,
+                    disbItem.AmountToWallet,
+                    disbItem.AmountToCredit,
+                    disbItem.CostCenter,
+                    disbItem.ApprovalStatusType,
+                    disbItem.IsSettledAmountCredited,
+                    disbItem.SettledDate,
+                    disbItem.SettlementComment,
+                    disbItem.SettlementAccount,
+                    disbItem.SettlementBankCard,
+                    disbItem.AdditionalData
+                    );
+            }
+            // Creating the Excel workbook 
+            // Add the datatable to the Excel workbook
+
+            List<string> docUrls = new();
+            var docUrl = GetExcel("AccountsPayableReports", dt);
+
+            docUrls.Add(docUrl);
+
+            return Ok(docUrls);
+        }
 
 
 
