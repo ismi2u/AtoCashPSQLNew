@@ -39,5 +39,7 @@ namespace AtoCash.Models
 
         public bool IsManager { get; set; }
 
+
+
     }
 }

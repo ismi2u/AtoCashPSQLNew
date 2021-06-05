@@ -689,6 +689,7 @@ namespace AtoCash.Controllers
                 {
                     disbursementsAndClaimsMaster.AmountToWallet = RoleLimitAmt - empCurPettyBal;
                     disbursementsAndClaimsMaster.AmountToCredit = expenseReimAmt - (RoleLimitAmt - empCurPettyBal);
+                    
                 }
                 else
                 {
@@ -697,7 +698,7 @@ namespace AtoCash.Controllers
                     disbursementsAndClaimsMaster.AmountToCredit = 0;
                 }
 
-
+                disbursementsAndClaimsMaster.IsSettledAmountCredited = false;
                 disbursementsAndClaimsMaster.ApprovalStatusId = (int)EApprovalStatus.Approved;
                 _context.Update(disbursementsAndClaimsMaster);
 

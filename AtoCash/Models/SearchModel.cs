@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AtoCash.Models
 {
-    public class CashAdvanceSearchModel
+    public class CashAndClaimRequestSearchModel
     {
         public int? EmpId { get; set; }
 
@@ -25,7 +25,19 @@ namespace AtoCash.Models
         public int? ApprovalStatusId { get; set; }
 
         public bool IsManager { get; set; }
+        public bool? IsAccountSettled { get; set; }
 
 
     }
-}
+
+
+
+    public class AccountsPayableSearchModel
+    {
+        public bool IsAccountSettled { get; set; }
+        public DateTime? SettledAccountsFrom { get; set; }
+        public DateTime? SettledAccountsTo { get; set; }
+    }
+
+
+    }

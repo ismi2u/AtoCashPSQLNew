@@ -108,22 +108,27 @@ namespace AtoCash.Authentication
 
              IdentityResult result = await userManager.CreateAsync(user, model.Password);
 
-            if (result.Succeeded)
-            {
-                //var roleResult =   await userManager.AddToRoleAsync(user, "User");
-
-                return Ok(new RespStatus { Status = "Success", Message = "User Registered Successfully! Please assign a User Role to Use App!" });
-            }
 
             RespStatus respStatus = new();
 
-            foreach (IdentityError error in result.Errors)
+            if (result.Succeeded)
             {
-                respStatus.Message = respStatus.Message + error.Description + "\n";
+                //Assigning a User Role to the Registered user
+                result = await userManager.AddToRoleAsync(user, "User");
+
+                if (result.Succeeded)
+                {
+                    respStatus.Message = "User Registered and User Access Role added to Employee!";
+                    respStatus.Status = "Success";
+                }
+                else
+                {
+                    respStatus.Message = "User Registered but User Access Role not added to Employee!";
+                    respStatus.Status = "Failure";
+                }
             }
 
             return Ok(respStatus);
-
         }
 
 

@@ -23,7 +23,7 @@ namespace AtoCash.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize(Roles = "AtominosAdmin, Admin, Manager, Finmgr, User")]
+    [Authorize(Roles = "AtominosAdmin, Admin, Manager, Finmgr, User, AccPayable")]
     public class ReportsController : ControllerBase
     {
         private readonly AtoCashDbContext _context;
@@ -491,7 +491,7 @@ namespace AtoCash.Controllers
         [HttpPost]
         [ActionName("GetAdvanceAndReimburseReportsEmployeeJson")]
 
-        public async Task<IActionResult> GetAdvanceAndReimburseReportsEmployeeJson(CashAdvanceSearchModel searchModel)
+        public async Task<IActionResult> GetAdvanceAndReimburseReportsEmployeeJson(CashAndClaimRequestSearchModel searchModel)
         {
             int? empid = searchModel.EmpId;
 
@@ -533,6 +533,8 @@ namespace AtoCash.Controllers
                     predicate = predicate.And(x => x.ClaimAmount >= searchModel.AmountFrom);
                 if (searchModel.AmountTo > 0)
                     predicate = predicate.And(x => x.ClaimAmount <= searchModel.AmountTo);
+                if (searchModel.IsAccountSettled != null)
+                    predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
                 if (searchModel.CostCenterId != 0 && searchModel.CostCenterId != null)
                     predicate = predicate.And(x => x.CostCenterId == searchModel.CostCenterId);
                 if (searchModel.ApprovalStatusId != 0 && searchModel.ApprovalStatusId != null)
@@ -603,7 +605,7 @@ namespace AtoCash.Controllers
         [HttpPost]
         [ActionName("GetAdvanceAndReimburseReportsEmployeeExcel")]
 
-        public async Task<IActionResult> GetAdvanceAndReimburseReportsEmployeeExcel(CashAdvanceSearchModel searchModel)
+        public async Task<IActionResult> GetAdvanceAndReimburseReportsEmployeeExcel(CashAndClaimRequestSearchModel searchModel)
         {
             int? empid = searchModel.EmpId;
 
@@ -644,10 +646,13 @@ namespace AtoCash.Controllers
                     predicate = predicate.And(x => x.ClaimAmount >= searchModel.AmountFrom);
                 if (searchModel.AmountTo > 0)
                     predicate = predicate.And(x => x.ClaimAmount <= searchModel.AmountTo);
+                if (searchModel.IsAccountSettled != null)
+                    predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
                 if (searchModel.CostCenterId != 0 && searchModel.CostCenterId != null)
                     predicate = predicate.And(x => x.CostCenterId == searchModel.CostCenterId);
                 if (searchModel.ApprovalStatusId != 0 && searchModel.ApprovalStatusId != null)
                     predicate = predicate.And(x => x.ApprovalStatusId == searchModel.ApprovalStatusId);
+
 
 
                 //restrict employees to generate only their content not of other employees
@@ -1004,15 +1009,35 @@ namespace AtoCash.Controllers
         }
 
 
-        [HttpGet]
-        [ActionName("GetAccountsPayableData")]
-        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> GetAccountsPayableData(bool IsSettled)
+        [HttpPost]
+        [ActionName("AccountsPayableData")]
+        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableData(AccountsPayableSearchModel searchModel)
         {
             List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
 
-            var disbursementsAndClaimsMasters = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == IsSettled).ToListAsync();
+            //using predicate builder to add multiple filter cireteria
+            var predicate = PredicateBuilder.New<DisbursementsAndClaimsMaster>();
 
-            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in disbursementsAndClaimsMasters)
+            if (searchModel.IsAccountSettled == true || searchModel.IsAccountSettled == false)
+                predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
+            if (searchModel.SettledAccountsFrom.HasValue)
+                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
+            if (searchModel.SettledAccountsTo.HasValue)
+                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
+
+
+            List<DisbursementsAndClaimsMaster> result = new();
+            if (predicate.IsStarted)
+            {
+                result = await _context.DisbursementsAndClaimsMasters.Where(predicate).ToListAsync();
+            }
+            else
+            {
+                result = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == searchModel.IsAccountSettled).ToListAsync();
+            }
+
+
+            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in result)
             {
                 DisbursementsAndClaimsMasterDTO disbursementsAndClaimsMasterDTO = new();
 
@@ -1053,15 +1078,37 @@ namespace AtoCash.Controllers
         }
 
         // GET: api/DisbursementsAndClaimsMasters
-        [HttpGet]
-        [ActionName("GetAccountsPayableReport")]
-        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> GetAccountsPayableReport(bool IsSettled)
+        [HttpPost]
+        [ActionName("AccountsPayableReport")]
+        public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableReport(AccountsPayableSearchModel searchModel)
         {
             List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
 
-            var disbursementsAndClaimsMasters = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == IsSettled).ToListAsync();
 
-            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in disbursementsAndClaimsMasters)
+            //using predicate builder to add multiple filter cireteria
+            var predicate = PredicateBuilder.New<DisbursementsAndClaimsMaster>();
+
+            if (searchModel.IsAccountSettled == true || searchModel.IsAccountSettled == false)
+                predicate = predicate.And(x => x.IsSettledAmountCredited  == searchModel.IsAccountSettled);
+            if (searchModel.SettledAccountsFrom.HasValue)
+                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
+            if (searchModel.SettledAccountsTo.HasValue)
+                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
+
+
+
+            List<DisbursementsAndClaimsMaster> result = new();
+            if (predicate.IsStarted)
+            {
+                result = await _context.DisbursementsAndClaimsMasters.Where(predicate).ToListAsync();
+            }
+            else
+            {
+                result = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == searchModel.IsAccountSettled).ToListAsync();
+            }
+
+
+            foreach (DisbursementsAndClaimsMaster disbursementsAndClaimsMaster in result)
             {
                 DisbursementsAndClaimsMasterDTO disbursementsAndClaimsMasterDTO = new();
 

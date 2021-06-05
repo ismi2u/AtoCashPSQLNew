@@ -641,6 +641,7 @@ namespace AtoCash.Controllers
             disbursementsAndClaimsMaster.ClaimAmount = pettyCashRequestDto.PettyClaimAmount;
             disbursementsAndClaimsMaster.AmountToWallet = 0;
             disbursementsAndClaimsMaster.AmountToCredit = 0;
+            disbursementsAndClaimsMaster.IsSettledAmountCredited = false;
             disbursementsAndClaimsMaster.CostCenterId = _context.Projects.Find(pettyCashRequestDto.ProjectId).CostCenterId;
             disbursementsAndClaimsMaster.ApprovalStatusId = (int)EApprovalStatus.Pending; //1-Initiating, 2-Pending, 3-InReview, 4-Approved, 5-Rejected
 
@@ -844,6 +845,7 @@ namespace AtoCash.Controllers
             disbursementsAndClaimsMaster.RecordDate = DateTime.Now;
             disbursementsAndClaimsMaster.CurrencyTypeId = pettyCashRequestDto.CurrencyTypeId;
             disbursementsAndClaimsMaster.ClaimAmount = empReqAmount;
+            disbursementsAndClaimsMaster.IsSettledAmountCredited = false;
             disbursementsAndClaimsMaster.CostCenterId = _context.Departments.Find(_context.Employees.Find(reqEmpid).DepartmentId).CostCenterId;
             disbursementsAndClaimsMaster.ApprovalStatusId = isSelfApprovedRequest ? (int)EApprovalStatus.Approved : (int)EApprovalStatus.Pending;
 
