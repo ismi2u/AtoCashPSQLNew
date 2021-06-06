@@ -34,7 +34,7 @@ namespace AtoCash.Models
 
     public class AccountsPayableSearchModel
     {
-        public bool IsAccountSettled { get; set; }
+        public bool? IsAccountSettled { get; set; }
         public DateTime? SettledAccountsFrom { get; set; }
         public DateTime? SettledAccountsTo { get; set; }
     }

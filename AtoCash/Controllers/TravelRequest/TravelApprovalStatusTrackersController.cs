@@ -468,7 +468,7 @@ namespace AtoCash.Controllers
 
 
 
-            var travelRequestTracks = _context.TravelApprovalStatusTrackers.Where(c => c.TravelApprovalRequestId == id).ToList();
+            var travelRequestTracks = _context.TravelApprovalStatusTrackers.Where(c => c.TravelApprovalRequestId == id).ToList().OrderBy(x => x.RoleId);
 
             if (travelRequestTracks == null)
             {

@@ -9,7 +9,7 @@ namespace AtoCash.Models
     {
 
         public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public int EmpId { get; set; }
 
         public string EmployeeName { get; set; }
         public int? TravelApprovalRequestId { get; set; }

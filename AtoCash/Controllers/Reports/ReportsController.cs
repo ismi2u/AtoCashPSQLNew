@@ -788,7 +788,7 @@ namespace AtoCash.Controllers
         public async Task<IActionResult> GetTravelRequestReportForEmployeeJson(TravelRequestSearchModel searchModel)
         {
 
-            int? empid = searchModel.EmployeeId;
+            int? empid = searchModel.EmpId;
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<TravelApprovalRequest>();
@@ -879,20 +879,20 @@ namespace AtoCash.Controllers
         public async Task<IActionResult> GetTravelRequestReportForEmployeeExcel(TravelRequestSearchModel searchModel)
         {
 
-            int? empid = searchModel.EmployeeId;
+            int? employeeId = searchModel.EmpId;
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<TravelApprovalRequest>();
 
-            if (empid == null)
+            if (employeeId == null)
             {
                 return Conflict(new RespStatus() { Status = "Failure", Message = "Employee Id not valid" });
             }
 
             // particular employee may be manager or any reportee
-            if (empid != 0 && searchModel.IsManager == false)
+            if (employeeId != 0 && searchModel.IsManager == false)
             {
-                predicate = predicate.And(x => x.EmployeeId == searchModel.EmployeeId);
+                predicate = predicate.And(x => x.EmployeeId == searchModel.EmpId);
             }
 
             //var emp = await _context.Employees.FindAsync(empid); //employee object
@@ -922,10 +922,10 @@ namespace AtoCash.Controllers
             var result = _context.TravelApprovalRequests.Where(predicate).ToList();
 
             // all employees who report under the manager
-            if (empid != 0 && searchModel.IsManager == true)
+            if (employeeId != 0 && searchModel.IsManager == true)
             {
-                int mgrDeptId = _context.Employees.Find(empid).DepartmentId;
-                List<int> mgrReportees = _context.Employees.Where(e => e.DepartmentId == mgrDeptId && e.Id != empid).Select(s => s.Id).ToList();
+                int mgrDeptId = _context.Employees.Find(employeeId).DepartmentId;
+                List<int> mgrReportees = _context.Employees.Where(e => e.DepartmentId == mgrDeptId && e.Id != employeeId).Select(s => s.Id).ToList();
                 result = result.Where(r => mgrReportees.Contains(r.EmployeeId)).ToList();
             }
 
@@ -1013,27 +1013,31 @@ namespace AtoCash.Controllers
         [ActionName("AccountsPayableData")]
         public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableData(AccountsPayableSearchModel searchModel)
         {
+
+            List<DisbursementsAndClaimsMaster> result = new();
             List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<DisbursementsAndClaimsMaster>();
 
+
             if (searchModel.IsAccountSettled == true || searchModel.IsAccountSettled == false)
+            {
                 predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
+            }
+
             if (searchModel.SettledAccountsFrom.HasValue)
                 predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
                 predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
 
-
-            List<DisbursementsAndClaimsMaster> result = new();
             if (predicate.IsStarted)
             {
-                result = await _context.DisbursementsAndClaimsMasters.Where(predicate).ToListAsync();
+                result = _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
             }
             else
             {
-                result = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == searchModel.IsAccountSettled).ToListAsync();
+                result = _context.DisbursementsAndClaimsMasters.ToList();
             }
 
 
@@ -1082,29 +1086,32 @@ namespace AtoCash.Controllers
         [ActionName("AccountsPayableReport")]
         public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableReport(AccountsPayableSearchModel searchModel)
         {
-            List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
+            
 
+            List<DisbursementsAndClaimsMaster> result = new();
+            List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<DisbursementsAndClaimsMaster>();
 
+
             if (searchModel.IsAccountSettled == true || searchModel.IsAccountSettled == false)
-                predicate = predicate.And(x => x.IsSettledAmountCredited  == searchModel.IsAccountSettled);
+            {
+                predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
+            }
+            
             if (searchModel.SettledAccountsFrom.HasValue)
                 predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
                 predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
 
-
-
-            List<DisbursementsAndClaimsMaster> result = new();
             if (predicate.IsStarted)
             {
-                result = await _context.DisbursementsAndClaimsMasters.Where(predicate).ToListAsync();
+                result =   _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
             }
             else
             {
-                result = await _context.DisbursementsAndClaimsMasters.Where(d => d.IsSettledAmountCredited == searchModel.IsAccountSettled).ToListAsync();
+                result =  _context.DisbursementsAndClaimsMasters.ToList();
             }
 
 
@@ -1168,9 +1175,9 @@ namespace AtoCash.Controllers
                     new DataColumn("IsSettledAmountCredited", typeof(bool)),
                     new DataColumn("SettledDate", typeof(DateTime)),
                     new DataColumn("SettlementComment", typeof(string)),
-                    new DataColumn("SettlementAccount", typeof(DateTime)),
-                    new DataColumn("SettlementBankCard", typeof(DateTime)),
-                    new DataColumn("AdditionalData", typeof(DateTime))
+                    new DataColumn("SettlementAccount", typeof(string)),
+                    new DataColumn("SettlementBankCard", typeof(string)),
+                    new DataColumn("AdditionalData", typeof(string))
                 });
 
 

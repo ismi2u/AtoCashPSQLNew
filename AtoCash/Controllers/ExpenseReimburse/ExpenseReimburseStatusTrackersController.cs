@@ -61,7 +61,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
 
 
 
-            var expenseReimburseStatusTrackers = _context.ExpenseReimburseStatusTrackers.Where(e => e.ExpenseReimburseRequestId == id).ToList();
+            var expenseReimburseStatusTrackers = _context.ExpenseReimburseStatusTrackers.Where(e => e.ExpenseReimburseRequestId == id).ToList().ToList().OrderBy(x => x.JobRoleId);
 
             if (expenseReimburseStatusTrackers == null)
             {

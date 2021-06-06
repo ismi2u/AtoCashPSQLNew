@@ -790,7 +790,7 @@ namespace AtoCash.Controllers
                     {
                         EmployeeId = pettyCashRequestDto.EmployeeId,
                         PettyCashRequestId = pettyCashRequestDto.Id,
-                        DepartmentId = approver.DepartmentId,
+                        DepartmentId = reqEmp.DepartmentId, //fix this
                         ProjectId = null,
                         SubProjectId = null,
                         WorkTaskId = null,

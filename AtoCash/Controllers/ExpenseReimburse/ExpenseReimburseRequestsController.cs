@@ -509,7 +509,7 @@ namespace AtoCash.Controllers
             expenseReimburseRequest.CurrencyTypeId = expenseReimburseRequestDto.CurrencyTypeId;
             expenseReimburseRequest.TotalClaimAmount = dblTotalClaimAmount; //Currently Zero but added as per the request
             expenseReimburseRequest.ExpReimReqDate = DateTime.Now;
-            expenseReimburseRequest.DepartmentId = _context.Employees.Find(expenseReimburseRequestDto.EmployeeId).DepartmentId;
+            expenseReimburseRequest.DepartmentId = reqEmp.DepartmentId;
             expenseReimburseRequest.ProjectId = null;
             expenseReimburseRequest.SubProjectId = null;
             expenseReimburseRequest.WorkTaskId = null;
@@ -578,9 +578,9 @@ namespace AtoCash.Controllers
                     CurrencyTypeId = expenseReimburseRequestDto.CurrencyTypeId,
                     TotalClaimAmount = dblTotalClaimAmount,
                     ExpReimReqDate = DateTime.Now,
-                    DepartmentId = _context.Employees.Find(expenseReimburseRequestDto.EmployeeId).DepartmentId,
+                    DepartmentId = reqEmp.DepartmentId,
                     ProjectId = null, //Approver Project Id
-                    JobRoleId = _context.Employees.Find(expenseReimburseRequestDto.EmployeeId).RoleId,
+                    JobRoleId = reqEmp.RoleId,
                     ApprovalGroupId = reqApprGroupId,
                     ApprovalLevelId = reqApprLevel,
                     ApprovedDate = null,
@@ -619,7 +619,7 @@ namespace AtoCash.Controllers
                         CurrencyTypeId = expenseReimburseRequestDto.CurrencyTypeId,
                         TotalClaimAmount = dblTotalClaimAmount,
                         ExpReimReqDate = DateTime.Now,
-                        DepartmentId = _context.Employees.Find(expenseReimburseRequestDto.EmployeeId).DepartmentId,
+                        DepartmentId = reqEmp.DepartmentId,
                         ProjectId = null, //Approver Project Id
                         JobRoleId = approver.RoleId,
                         ApprovalGroupId = reqApprGroupId,
@@ -658,7 +658,7 @@ namespace AtoCash.Controllers
             disbursementsAndClaimsMaster.EmployeeId = expenseReimburseRequestDto.EmployeeId;
             disbursementsAndClaimsMaster.ExpenseReimburseReqId = expenseReimburseRequest.Id;
             disbursementsAndClaimsMaster.RequestTypeId = (int)ERequestType.ExpenseReim;
-            disbursementsAndClaimsMaster.DepartmentId = _context.Employees.Find(expenseReimburseRequestDto.EmployeeId).DepartmentId;
+            disbursementsAndClaimsMaster.DepartmentId = reqEmp.DepartmentId;
             disbursementsAndClaimsMaster.ProjectId = expenseReimburseRequestDto.ProjectId;
             disbursementsAndClaimsMaster.SubProjectId = expenseReimburseRequestDto.SubProjectId;
             disbursementsAndClaimsMaster.WorkTaskId = expenseReimburseRequestDto.WorkTaskId;
@@ -679,8 +679,8 @@ namespace AtoCash.Controllers
             if (isSelfApprovedRequest)
             {
                 double expenseReimAmt = expenseReimburseRequest.TotalClaimAmount;
-                double RoleLimitAmt = _context.JobRoles.Find(_context.Employees.Find(expenseReimburseRequest.EmployeeId).RoleId).MaxPettyCashAllowed;
-                EmpCurrentPettyCashBalance empCurrentPettyCashBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == expenseReimburseRequest.EmployeeId).FirstOrDefault();
+                double RoleLimitAmt = _context.JobRoles.Find(reqEmp.RoleId).MaxPettyCashAllowed;
+                EmpCurrentPettyCashBalance empCurrentPettyCashBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == reqEmp.Id).FirstOrDefault();
                 double empCurPettyBal = empCurrentPettyCashBalance.CurBalance;
 
                 //logic goes here
@@ -899,8 +899,8 @@ namespace AtoCash.Controllers
             if (isSelfApprovedRequest)
             {
                 double expenseReimAmt = expenseReimburseRequest.TotalClaimAmount;
-                double RoleLimitAmt = _context.JobRoles.Find(_context.Employees.Find(expenseReimburseRequest.EmployeeId).RoleId).MaxPettyCashAllowed;
-                EmpCurrentPettyCashBalance empCurrentPettyCashBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == expenseReimburseRequest.EmployeeId).FirstOrDefault();
+                double RoleLimitAmt = _context.JobRoles.Find(_context.Employees.Find(reqEmp.Id).RoleId).MaxPettyCashAllowed;
+                EmpCurrentPettyCashBalance empCurrentPettyCashBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == reqEmp.Id).FirstOrDefault();
                 double empCurPettyBal = empCurrentPettyCashBalance.CurBalance;
 
                 //logic goes here
