@@ -26,7 +26,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
 
         // GET: api/ExpenseSubClaims
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExpenseSubClaim>>> GetExpenseSubClaims()
+        public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> GetExpenseSubClaims()
         {
            List<ExpenseSubClaim> expenseSubClaims = await _context.ExpenseSubClaims.ToListAsync();
 

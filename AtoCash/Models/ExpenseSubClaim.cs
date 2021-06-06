@@ -68,6 +68,7 @@ namespace AtoCash.Models
         public string EmployeeName { get; set; }
         public int EmployeeId { get; set; }
 
+        public int ExpenseReimburseReqId { get; set; }
         public Double ExpenseReimbClaimAmount { get; set; }
 
         public string DocumentIDs { get; set; }
@@ -94,15 +95,15 @@ namespace AtoCash.Models
         public int ExpenseTypeId { get; set; }
         public string ExpenseType { get; set; }
 
-        public string Department { get; set; }
+        public string Department{ get; set; }
         public int? DepartmentId { get; set; }
-        public string Project { get; set; }
+        public string Project{ get; set; }
         public int? ProjectId { get; set; }
 
-        public string SubProject { get; set; }
+        public string SubProject{ get; set; }
         public int? SubProjectId { get; set; }
 
-        public string WorkTask { get; set; }
+        public string WorkTask{ get; set; }
         public int? WorkTaskId { get; set; }
 
 

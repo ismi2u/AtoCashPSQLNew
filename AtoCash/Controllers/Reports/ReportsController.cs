@@ -1020,11 +1020,14 @@ namespace AtoCash.Controllers
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<DisbursementsAndClaimsMaster>();
 
+            predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (searchModel.IsAccountSettled == true || searchModel.IsAccountSettled == false)
             {
                 predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
             }
+
+            predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (searchModel.SettledAccountsFrom.HasValue)
                 predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
@@ -1104,6 +1107,8 @@ namespace AtoCash.Controllers
                 predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
                 predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
+
+            predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (predicate.IsStarted)
             {
@@ -1212,6 +1217,213 @@ namespace AtoCash.Controllers
 
             List<string> docUrls = new();
             var docUrl = GetExcel("AccountsPayableReports", dt);
+
+            docUrls.Add(docUrl);
+
+            return Ok(docUrls);
+        }
+
+
+
+        [HttpPost]
+        [ActionName("ExpenseSubClaimsData")]
+        public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsData(ExpenseSubClaimsSearchModel searchModel)
+        {
+
+
+            List<ExpenseSubClaim> result = new();
+            List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
+
+            //using predicate builder to add multiple filter cireteria
+            var predicate = PredicateBuilder.New<ExpenseSubClaim>();
+
+            if (searchModel.ExpenseTypeId != 0 || searchModel.ExpenseTypeId != null)
+                predicate = predicate.And(x => x.ExpenseTypeId == searchModel.ExpenseTypeId);
+            if (searchModel.ExpenseReimbClaimAmountFrom.HasValue)
+                predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
+            if (searchModel.ExpenseReimbClaimAmountTo.HasValue)
+                predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountTo);
+
+
+            if (predicate.IsStarted)
+            {
+                result = _context.ExpenseSubClaims.Where(predicate).ToList();
+            }
+            else
+            {
+                result = _context.ExpenseSubClaims.ToList();
+            }
+
+
+            foreach (ExpenseSubClaim expenseSubClaim in result)
+            {
+                ExpenseSubClaimDTO expenseSubClaimDTO = new();
+
+                var expReimReqId = _context.ExpenseSubClaims.Find(expenseSubClaim.Id).ExpenseReimburseRequestId;
+                var expReimRequest = _context.ExpenseReimburseRequests.Find(expReimReqId);
+
+                expenseSubClaimDTO.ExpenseReimburseReqId = expReimReqId;
+                expenseSubClaimDTO.Id = expenseSubClaim.Id;
+                expenseSubClaimDTO.EmployeeId = expReimRequest.EmployeeId;
+                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expReimRequest.EmployeeId).GetFullName();
+                expenseSubClaimDTO.ExpenseReimbClaimAmount = expenseSubClaim.ExpenseReimbClaimAmount;
+                expenseSubClaimDTO.ExpReimReqDate = expReimRequest.ExpReimReqDate;
+                expenseSubClaimDTO.InvoiceNo = expenseSubClaim.InvoiceNo;
+                expenseSubClaimDTO.InvoiceDate = expenseSubClaim.InvoiceDate;
+                expenseSubClaimDTO.Tax = expenseSubClaim.Tax;
+                expenseSubClaimDTO.TaxAmount = expenseSubClaim.TaxAmount;
+                expenseSubClaimDTO.Vendor = expenseSubClaim.Vendor;
+                expenseSubClaimDTO.Location = expenseSubClaim.Location;
+                expenseSubClaimDTO.Description = expenseSubClaim.Description;
+                expenseSubClaimDTO.CurrencyTypeId = expReimRequest.CurrencyTypeId;
+                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimRequest.CurrencyTypeId).CurrencyCode;
+                expenseSubClaimDTO.ExpenseTypeId = expenseSubClaim.ExpenseTypeId;
+                expenseSubClaimDTO.ExpenseType = _context.ExpenseTypes.Find(expenseSubClaim.ExpenseTypeId).ExpenseTypeName;
+
+                expenseSubClaimDTO.DepartmentId = expReimRequest.DepartmentId;
+                expenseSubClaimDTO.Department= expReimRequest.DepartmentId != null ? _context.Departments.Find(expReimRequest.DepartmentId).DeptName : string.Empty;
+
+                expenseSubClaimDTO.ProjectId = expReimRequest.ProjectId;
+                expenseSubClaimDTO.Project= expReimRequest.ProjectId != null ? _context.Projects.Find(expReimRequest.ProjectId).ProjectName : string.Empty;
+
+                expenseSubClaimDTO.SubProjectId = expReimRequest.SubProjectId;
+                expenseSubClaimDTO.SubProject= expReimRequest.SubProjectId != null ? _context.SubProjects.Find(expReimRequest.SubProjectId).SubProjectName : string.Empty;
+
+                expenseSubClaimDTO.WorkTaskId = expReimRequest.WorkTaskId;
+                expenseSubClaimDTO.WorkTask= expReimRequest.WorkTaskId != null ? _context.WorkTasks.Find(expReimRequest.WorkTaskId).TaskName : string.Empty;
+
+
+            }
+
+            return Ok(ListExpenseSubClaimDTO);
+        }
+
+
+
+        [HttpPost]
+        [ActionName("ExpenseSubClaimsReport")]
+        public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsReport(ExpenseSubClaimsSearchModel searchModel)
+        {
+
+
+            List<ExpenseSubClaim> result = new();
+            List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
+
+            //using predicate builder to add multiple filter cireteria
+            var predicate = PredicateBuilder.New<ExpenseSubClaim>();
+
+            if (searchModel.ExpenseTypeId !=0 || searchModel.ExpenseTypeId != null)
+                predicate = predicate.And(x => x.ExpenseTypeId == searchModel.ExpenseTypeId);
+            if (searchModel.ExpenseReimbClaimAmountFrom.HasValue)
+                predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
+            if (searchModel.ExpenseReimbClaimAmountTo.HasValue)
+                predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountTo);
+
+
+            if (predicate.IsStarted)
+            {
+                result = _context.ExpenseSubClaims.Where(predicate).ToList();
+            }
+            else
+            {
+                result = _context.ExpenseSubClaims.ToList();
+            }
+
+
+            foreach (ExpenseSubClaim expenseSubClaim in result)
+            {
+                ExpenseSubClaimDTO expenseSubClaimDTO = new();
+
+                var expReimReqId = _context.ExpenseSubClaims.Find(expenseSubClaim.Id).ExpenseReimburseRequestId;
+                var expReimRequest = _context.ExpenseReimburseRequests.Find(expReimReqId);
+
+                expenseSubClaimDTO.ExpenseReimburseReqId = expReimReqId;
+                expenseSubClaimDTO.Id = expenseSubClaim.Id;
+                expenseSubClaimDTO.EmployeeId = expReimRequest.EmployeeId;
+                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expReimRequest.EmployeeId).GetFullName();
+                expenseSubClaimDTO.ExpenseReimbClaimAmount = expenseSubClaim.ExpenseReimbClaimAmount;
+                expenseSubClaimDTO.ExpReimReqDate = expReimRequest.ExpReimReqDate;
+                expenseSubClaimDTO.InvoiceNo = expenseSubClaim.InvoiceNo;
+                expenseSubClaimDTO.InvoiceDate = expenseSubClaim.InvoiceDate;
+                expenseSubClaimDTO.Tax = expenseSubClaim.Tax;
+                expenseSubClaimDTO.TaxAmount = expenseSubClaim.TaxAmount;
+                expenseSubClaimDTO.Vendor = expenseSubClaim.Vendor;
+                expenseSubClaimDTO.Location = expenseSubClaim.Location;
+                expenseSubClaimDTO.Description = expenseSubClaim.Description;
+                expenseSubClaimDTO.CurrencyTypeId = expReimRequest.CurrencyTypeId;
+                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimRequest.CurrencyTypeId).CurrencyCode;
+                expenseSubClaimDTO.ExpenseTypeId = expenseSubClaim.ExpenseTypeId;
+                expenseSubClaimDTO.ExpenseType = _context.ExpenseTypes.Find(expenseSubClaim.ExpenseTypeId).ExpenseTypeName;
+                
+                expenseSubClaimDTO.DepartmentId = expReimRequest.DepartmentId;
+                expenseSubClaimDTO.Department= expReimRequest.DepartmentId !=null ? _context.Departments.Find(expReimRequest.DepartmentId).DeptName: string.Empty;
+
+                expenseSubClaimDTO.ProjectId = expReimRequest.ProjectId;
+                expenseSubClaimDTO.Project= expReimRequest.ProjectId != null ? _context.Projects.Find(expReimRequest.ProjectId).ProjectName : string.Empty;
+
+                expenseSubClaimDTO.SubProjectId = expReimRequest.SubProjectId;
+                expenseSubClaimDTO.SubProject= expReimRequest.SubProjectId != null ? _context.SubProjects.Find(expReimRequest.SubProjectId).SubProjectName : string.Empty;
+
+                expenseSubClaimDTO.WorkTaskId = expReimRequest.WorkTaskId;
+                expenseSubClaimDTO.WorkTask= expReimRequest.WorkTaskId != null ? _context.WorkTasks.Find(expReimRequest.WorkTaskId).TaskName : string.Empty;
+
+
+            }
+
+
+            DataTable dt = new();
+            dt.Columns.AddRange(new DataColumn[18]
+                {
+                    //new DataColumn("Id", typeof(int)),
+                    new DataColumn("ExpenseReimburseId", typeof(int)),
+                    new DataColumn("ExpenseSubClaimId", typeof(int)),
+                    new DataColumn("EmployeeName", typeof(string)),
+                    new DataColumn("ExpReimReqDate",typeof(DateTime)),
+                    new DataColumn("InvoiceNo",typeof(string)),
+                    new DataColumn("InvoiceDate",typeof(DateTime)),
+                    new DataColumn("Tax",typeof(float)),
+                    new DataColumn("TaxAmount",typeof(Double)),
+                    new DataColumn("ExpSubClaimAmount",typeof(Double)),
+                    new DataColumn("Vendor",typeof(string)),
+                    new DataColumn("Location",typeof(string)),
+                    new DataColumn("CurrencyType",typeof(string)),
+                    new DataColumn("ExpenseType", typeof(string)),
+                    new DataColumn("Department",typeof(string)),
+                    new DataColumn("Project",typeof(string)),
+                    new DataColumn("SubProject", typeof(string)),
+                    new DataColumn("WorkTask",typeof(string)),
+                    new DataColumn("Description",typeof(string))
+                });
+
+
+            foreach (var claimItem in ListExpenseSubClaimDTO)
+            {
+                dt.Rows.Add(
+                    claimItem.ExpenseReimburseReqId,
+                    claimItem.Id,
+                    claimItem.EmployeeName,
+                    claimItem.ExpReimReqDate,
+                    claimItem.InvoiceNo,
+                    claimItem.InvoiceDate,
+                    claimItem.Tax,
+                    claimItem.TaxAmount,
+                    claimItem.ExpenseReimbClaimAmount,
+                    claimItem.Vendor,
+                    claimItem.Location,
+                    claimItem.CurrencyType,
+                    claimItem.ExpenseType,
+                    claimItem.Department,
+                    claimItem.Project,
+                    claimItem.SubProject,
+                    claimItem.WorkTask,
+                    claimItem.Description
+                    );
+            }
+            // Creating the Excel workbook 
+            // Add the datatable to the Excel workbook
+
+            List<string> docUrls = new();
+            var docUrl = GetExcel("ExpenseSubClaimsReports", dt);
 
             docUrls.Add(docUrl);
 

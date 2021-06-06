@@ -40,4 +40,16 @@ namespace AtoCash.Models
     }
 
 
+
+    public class ExpenseSubClaimsSearchModel
+    {
+        public int? ExpenseTypeId { get; set; }
+        public double? ExpenseReimbClaimAmountFrom { get; set; }
+        public double? ExpenseReimbClaimAmountTo { get; set; }
+        public DateTime? RequestRaisedDateFrom { get; set; }
+        public DateTime? RequestRaisedDateTo { get; set; }
+        public int? ApprovalStatusTypeId { get; set; }
+
     }
+
+}
