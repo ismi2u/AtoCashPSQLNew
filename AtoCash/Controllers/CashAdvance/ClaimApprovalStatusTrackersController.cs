@@ -435,7 +435,7 @@ namespace AtoCash.Controllers
 
         [HttpGet("{id}")]
         [ActionName("ApprovalsPendingForApprover")]
-        public ActionResult<IEnumerable<ClaimApprovalStatusTrackerDTO>> GetPendingApprovalRequestForApprover(int id)
+        public ActionResult<IEnumerable<ClaimApprovalStatusTrackerDTO>> ApprovalsPendingForApprover(int id)
         {
 
             if (id == 0)
@@ -468,6 +468,8 @@ namespace AtoCash.Controllers
 
             foreach (ClaimApprovalStatusTracker claimApprovalStatusTracker in claimApprovalStatusTrackers)
             {
+
+                var pettyCashReq = _context.PettyCashRequests.Find(claimApprovalStatusTracker.PettyCashRequestId);
                 ClaimApprovalStatusTrackerDTO claimApprovalStatusTrackerDTO = new()
                 {
                     Id = claimApprovalStatusTracker.Id,
@@ -481,6 +483,7 @@ namespace AtoCash.Controllers
                     RoleId = claimApprovalStatusTracker.RoleId,
                     JobRole = _context.JobRoles.Find(claimApprovalStatusTracker.RoleId).RoleName,
                     ApprovalLevelId = claimApprovalStatusTracker.ApprovalLevelId,
+                    ClaimAmount = pettyCashReq.PettyClaimAmount,
                     ReqDate = claimApprovalStatusTracker.ReqDate,
                     FinalApprovedDate = claimApprovalStatusTracker.FinalApprovedDate,
                     ApprovalStatusTypeId = claimApprovalStatusTracker.ApprovalStatusTypeId,

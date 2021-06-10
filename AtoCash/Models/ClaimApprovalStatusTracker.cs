@@ -75,7 +75,7 @@ namespace AtoCash.Models
         public int ApprovalStatusTypeId { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string Comments { get; set; }
     }
 
@@ -116,6 +116,7 @@ namespace AtoCash.Models
         public int ApprovalStatusTypeId { get; set; }
         public string ApprovalStatusType { get; set; }
 
+        public Double ClaimAmount { get; set; }
         public string Comments { get; set; }
 
     }

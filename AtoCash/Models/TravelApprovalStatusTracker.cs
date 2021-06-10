@@ -83,7 +83,7 @@ namespace AtoCash.Models
         public int ApprovalStatusTypeId { get; set; }
 
 
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string Comments { get; set; }
 
     }

@@ -37,7 +37,7 @@ namespace AtoCash.Controllers
                 ProjectVM projectVM = new()
                 {
                     Id = project.Id,
-                    ProjectName = project.ProjectName + "-" + project.ProjectDesc
+                    ProjectName = project.ProjectName + ":" + project.ProjectDesc
                 };
 
                 ListProjectVM.Add(projectVM);

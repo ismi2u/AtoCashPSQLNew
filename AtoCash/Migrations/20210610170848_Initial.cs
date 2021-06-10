@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AtoCash.Migrations
 {
@@ -11,10 +12,10 @@ namespace AtoCash.Migrations
                 name: "ApprovalGroups",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApprovalGroupCode = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    ApprovalGroupDesc = table.Column<string>(type: "nvarchar(150)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ApprovalGroupCode = table.Column<string>(type: "varchar(20)", nullable: false),
+                    ApprovalGroupDesc = table.Column<string>(type: "varchar(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,10 +26,10 @@ namespace AtoCash.Migrations
                 name: "ApprovalLevels",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Level = table.Column<int>(type: "int", nullable: false),
-                    LevelDesc = table.Column<string>(type: "nvarchar(150)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Level = table.Column<int>(type: "integer", nullable: false),
+                    LevelDesc = table.Column<string>(type: "varchar(150)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,10 +40,10 @@ namespace AtoCash.Migrations
                 name: "ApprovalStatusTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(25)", nullable: false),
-                    StatusDesc = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Status = table.Column<string>(type: "varchar(25)", nullable: false),
+                    StatusDesc = table.Column<string>(type: "varchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,10 +54,10 @@ namespace AtoCash.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,22 +68,22 @@ namespace AtoCash.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,10 +94,10 @@ namespace AtoCash.Migrations
                 name: "EmploymentTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmpJobTypeCode = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    EmpJobTypeDesc = table.Column<string>(type: "nvarchar(150)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmpJobTypeCode = table.Column<string>(type: "varchar(20)", nullable: false),
+                    EmpJobTypeDesc = table.Column<string>(type: "varchar(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,10 +108,10 @@ namespace AtoCash.Migrations
                 name: "FileDocuments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UniqueFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ActualFileName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UniqueFileName = table.Column<string>(type: "text", nullable: false),
+                    ActualFileName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,11 +122,11 @@ namespace AtoCash.Migrations
                 name: "JobRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleCode = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    MaxPettyCashAllowed = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleCode = table.Column<string>(type: "varchar(20)", nullable: false),
+                    RoleName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    MaxPettyCashAllowed = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,10 +137,10 @@ namespace AtoCash.Migrations
                 name: "RequestTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RequestName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    RequestTypeDesc = table.Column<string>(type: "nvarchar(150)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RequestName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    RequestTypeDesc = table.Column<string>(type: "varchar(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,9 +151,9 @@ namespace AtoCash.Migrations
                 name: "StatusTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(8)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Status = table.Column<string>(type: "varchar(8)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,11 +164,11 @@ namespace AtoCash.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,11 +185,11 @@ namespace AtoCash.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,10 +206,10 @@ namespace AtoCash.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,8 +226,8 @@ namespace AtoCash.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,10 +250,10 @@ namespace AtoCash.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -269,11 +270,11 @@ namespace AtoCash.Migrations
                 name: "ApprovalRoleMaps",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ApprovalGroupId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalLevelId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ApprovalGroupId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalLevelId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -283,30 +284,30 @@ namespace AtoCash.Migrations
                         column: x => x.ApprovalGroupId,
                         principalTable: "ApprovalGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ApprovalRoleMaps_ApprovalLevels_ApprovalLevelId",
                         column: x => x.ApprovalLevelId,
                         principalTable: "ApprovalLevels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ApprovalRoleMaps_JobRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "JobRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CostCenters",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CostCenterCode = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    CostCenterDesc = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CostCenterCode = table.Column<string>(type: "varchar(20)", nullable: false),
+                    CostCenterDesc = table.Column<string>(type: "varchar(150)", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,19 +317,19 @@ namespace AtoCash.Migrations
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CurrencyTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(3)", nullable: false),
-                    CurrencyName = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CurrencyCode = table.Column<string>(type: "varchar(3)", nullable: false),
+                    CurrencyName = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Country = table.Column<string>(type: "varchar(100)", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -338,18 +339,18 @@ namespace AtoCash.Migrations
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ExpenseTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ExpenseTypeName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    ExpenseTypeDesc = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExpenseTypeName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ExpenseTypeDesc = table.Column<string>(type: "varchar(150)", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -359,19 +360,19 @@ namespace AtoCash.Migrations
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeptCode = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    DeptName = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    CostCenterId = table.Column<int>(type: "int", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DeptCode = table.Column<string>(type: "varchar(50)", nullable: false),
+                    DeptName = table.Column<string>(type: "varchar(150)", nullable: false),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -381,42 +382,42 @@ namespace AtoCash.Migrations
                         column: x => x.CostCenterId,
                         principalTable: "CostCenters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Departments_StatusTypes_StatusTypeId",
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(200)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(100)", nullable: false),
-                    EmpCode = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    BankAccount = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    BankCardNo = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    NationalID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassportNo = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    TaxNumber = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    Nationality = table.Column<string>(type: "nvarchar(50)", nullable: true),
-                    DOB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DOJ = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MobileNumber = table.Column<string>(type: "nvarchar(20)", nullable: true),
-                    EmploymentTypeId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalGroupId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "varchar(200)", nullable: false),
+                    MiddleName = table.Column<string>(type: "varchar(100)", nullable: true),
+                    LastName = table.Column<string>(type: "varchar(100)", nullable: false),
+                    EmpCode = table.Column<string>(type: "varchar(30)", nullable: false),
+                    BankAccount = table.Column<string>(type: "varchar(30)", nullable: false),
+                    BankCardNo = table.Column<string>(type: "varchar(50)", nullable: true),
+                    NationalID = table.Column<string>(type: "text", nullable: true),
+                    PassportNo = table.Column<string>(type: "varchar(20)", nullable: true),
+                    TaxNumber = table.Column<string>(type: "varchar(20)", nullable: true),
+                    Nationality = table.Column<string>(type: "varchar(50)", nullable: true),
+                    DOB = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DOJ = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    MobileNumber = table.Column<string>(type: "varchar(20)", nullable: true),
+                    EmploymentTypeId = table.Column<int>(type: "integer", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalGroupId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "integer", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -426,48 +427,48 @@ namespace AtoCash.Migrations
                         column: x => x.ApprovalGroupId,
                         principalTable: "ApprovalGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_CurrencyTypes_CurrencyTypeId",
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_Departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "Departments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_EmploymentTypes_EmploymentTypeId",
                         column: x => x.EmploymentTypeId,
                         principalTable: "EmploymentTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_JobRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "JobRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Employees_StatusTypes_StatusTypeId",
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "EmpCurrentPettyCashBalances",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    CurBalance = table.Column<double>(type: "float", nullable: false),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    CurBalance = table.Column<double>(type: "double precision", nullable: false),
+                    UpdatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -477,20 +478,20 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectName = table.Column<string>(type: "nvarchar(25)", nullable: false),
-                    CostCenterId = table.Column<int>(type: "int", nullable: false),
-                    ProjectManagerId = table.Column<int>(type: "int", nullable: false),
-                    ProjectDesc = table.Column<string>(type: "nvarchar(200)", nullable: false),
-                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectName = table.Column<string>(type: "varchar(25)", nullable: false),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectManagerId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectDesc = table.Column<string>(type: "varchar(200)", nullable: false),
+                    StatusTypeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -500,29 +501,29 @@ namespace AtoCash.Migrations
                         column: x => x.CostCenterId,
                         principalTable: "CostCenters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Projects_Employees_ProjectManagerId",
                         column: x => x.ProjectManagerId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Projects_StatusTypes_StatusTypeId",
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ProjectManagements",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -532,24 +533,24 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProjectManagements_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SubProjects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    SubProjectName = table.Column<string>(type: "nvarchar(25)", nullable: false),
-                    SubProjectDesc = table.Column<string>(type: "nvarchar(200)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    SubProjectName = table.Column<string>(type: "varchar(25)", nullable: false),
+                    SubProjectDesc = table.Column<string>(type: "varchar(200)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -559,18 +560,18 @@ namespace AtoCash.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "WorkTasks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubProjectId = table.Column<int>(type: "int", nullable: false),
-                    TaskName = table.Column<string>(type: "nvarchar(25)", nullable: false),
-                    TaskDesc = table.Column<string>(type: "nvarchar(200)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: false),
+                    TaskName = table.Column<string>(type: "varchar(25)", nullable: false),
+                    TaskDesc = table.Column<string>(type: "varchar(200)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -580,43 +581,50 @@ namespace AtoCash.Migrations
                         column: x => x.SubProjectId,
                         principalTable: "SubProjects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ExpenseReimburseRequests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ExpenseReportTitle = table.Column<string>(type: "nvarchar(250)", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
-                    TotalClaimAmount = table.Column<double>(type: "float", nullable: false),
-                    ExpReimReqDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExpenseReportTitle = table.Column<string>(type: "varchar(250)", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "integer", nullable: false),
+                    TotalClaimAmount = table.Column<double>(type: "double precision", nullable: false),
+                    ExpReimReqDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: true),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseReimburseRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpenseReimburseRequests_ApprovalStatusTypes_ApprovalStatusTypeId",
+                        name: "FK_ExpenseReimburseRequests_ApprovalStatusTypes_ApprovalStatus~",
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpenseReimburseRequests_CostCenters_CostCenterId",
+                        column: x => x.CostCenterId,
+                        principalTable: "CostCenters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseRequests_CurrencyTypes_CurrencyTypeId",
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseRequests_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -628,7 +636,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseRequests_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -653,20 +661,21 @@ namespace AtoCash.Migrations
                 name: "PettyCashRequests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    PettyClaimAmount = table.Column<double>(type: "float", nullable: false),
-                    PettyClaimRequestDesc = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    CashReqDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    PettyClaimAmount = table.Column<double>(type: "double precision", nullable: false),
+                    PettyClaimRequestDesc = table.Column<string>(type: "varchar(150)", nullable: false),
+                    CashReqDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "integer", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: true),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -676,13 +685,19 @@ namespace AtoCash.Migrations
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PettyCashRequests_CostCenters_CostCenterId",
+                        column: x => x.CostCenterId,
+                        principalTable: "CostCenters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PettyCashRequests_CurrencyTypes_CurrencyTypeId",
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PettyCashRequests_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -694,7 +709,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PettyCashRequests_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -719,37 +734,37 @@ namespace AtoCash.Migrations
                 name: "TravelApprovalRequests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    TravelStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TravelEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TravelPurpose = table.Column<string>(type: "nvarchar(150)", nullable: false),
-                    ReqRaisedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    CostCenterId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    TravelStartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    TravelEndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    TravelPurpose = table.Column<string>(type: "varchar(150)", nullable: false),
+                    ReqRaisedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TravelApprovalRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TravelApprovalRequests_ApprovalStatusTypes_ApprovalStatusTypeId",
+                        name: "FK_TravelApprovalRequests_ApprovalStatusTypes_ApprovalStatusTy~",
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalRequests_CostCenters_CostCenterId",
                         column: x => x.CostCenterId,
                         principalTable: "CostCenters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalRequests_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -761,7 +776,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalRequests_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -786,46 +801,46 @@ namespace AtoCash.Migrations
                 name: "ExpenseReimburseStatusTrackers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    ExpenseReimburseRequestId = table.Column<int>(type: "int", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
-                    TotalClaimAmount = table.Column<double>(type: "float", nullable: false),
-                    ExpReimReqDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjManagerId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    ApprovalGroupId = table.Column<int>(type: "int", nullable: false),
-                    JobRoleId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalLevelId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    ApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    ExpenseReimburseRequestId = table.Column<int>(type: "integer", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "integer", nullable: false),
+                    TotalClaimAmount = table.Column<double>(type: "double precision", nullable: false),
+                    ExpReimReqDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjManagerId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    ApprovalGroupId = table.Column<int>(type: "integer", nullable: false),
+                    JobRoleId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalLevelId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseReimburseStatusTrackers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpenseReimburseStatusTrackers_ApprovalLevels_ApprovalLevelId",
+                        name: "FK_ExpenseReimburseStatusTrackers_ApprovalLevels_ApprovalLevel~",
                         column: x => x.ApprovalLevelId,
                         principalTable: "ApprovalLevels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpenseReimburseStatusTrackers_ApprovalStatusTypes_ApprovalStatusTypeId",
+                        name: "FK_ExpenseReimburseStatusTrackers_ApprovalStatusTypes_Approval~",
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseStatusTrackers_CurrencyTypes_CurrencyTypeId",
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseStatusTrackers_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -837,7 +852,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseStatusTrackers_Employees_ProjManagerId",
                         column: x => x.ProjManagerId,
@@ -845,17 +860,17 @@ namespace AtoCash.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ExpenseReimburseStatusTrackers_ExpenseReimburseRequests_ExpenseReimburseRequestId",
+                        name: "FK_ExpenseReimburseStatusTrackers_ExpenseReimburseRequests_Exp~",
                         column: x => x.ExpenseReimburseRequestId,
                         principalTable: "ExpenseReimburseRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseStatusTrackers_JobRoles_JobRoleId",
                         column: x => x.JobRoleId,
                         principalTable: "JobRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseReimburseStatusTrackers_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -880,57 +895,99 @@ namespace AtoCash.Migrations
                 name: "ExpenseSubClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ExpenseReimburseRequestId = table.Column<int>(type: "int", nullable: false),
-                    ExpenseTypeId = table.Column<int>(type: "int", nullable: false),
-                    ExpenseReimbClaimAmount = table.Column<double>(type: "float", nullable: false),
-                    DocumentIDs = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    InvoiceNo = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExpenseReimburseRequestId = table.Column<int>(type: "integer", nullable: false),
+                    ExpenseTypeId = table.Column<int>(type: "integer", nullable: false),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    ExpenseReimbClaimAmount = table.Column<double>(type: "double precision", nullable: false),
+                    DocumentIDs = table.Column<string>(type: "text", nullable: true),
+                    InvoiceNo = table.Column<string>(type: "varchar(50)", nullable: false),
                     Tax = table.Column<float>(type: "real", nullable: false),
-                    TaxAmount = table.Column<double>(type: "float", nullable: false),
-                    InvoiceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Vendor = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(20)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    TaxAmount = table.Column<double>(type: "double precision", nullable: false),
+                    InvoiceDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Vendor = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Location = table.Column<string>(type: "varchar(20)", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseSubClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpenseSubClaims_ExpenseReimburseRequests_ExpenseReimburseRequestId",
+                        name: "FK_ExpenseSubClaims_CostCenters_CostCenterId",
+                        column: x => x.CostCenterId,
+                        principalTable: "CostCenters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_ExpenseReimburseRequests_ExpenseReimburseR~",
                         column: x => x.ExpenseReimburseRequestId,
                         principalTable: "ExpenseReimburseRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpenseSubClaims_ExpenseTypes_ExpenseTypeId",
                         column: x => x.ExpenseTypeId,
                         principalTable: "ExpenseTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_SubProjects_SubProjectId",
+                        column: x => x.SubProjectId,
+                        principalTable: "SubProjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ExpenseSubClaims_WorkTasks_WorkTaskId",
+                        column: x => x.WorkTaskId,
+                        principalTable: "WorkTasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ClaimApprovalStatusTrackers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    PettyCashRequestId = table.Column<int>(type: "int", nullable: true),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjManagerId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    ApprovalGroupId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalLevelId = table.Column<int>(type: "int", nullable: false),
-                    ReqDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FinalApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    PettyCashRequestId = table.Column<int>(type: "integer", nullable: true),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjManagerId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    ApprovalGroupId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalLevelId = table.Column<int>(type: "integer", nullable: false),
+                    ReqDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FinalApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -940,13 +997,13 @@ namespace AtoCash.Migrations
                         column: x => x.ApprovalLevelId,
                         principalTable: "ApprovalLevels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClaimApprovalStatusTrackers_ApprovalStatusTypes_ApprovalStatusTypeId",
+                        name: "FK_ClaimApprovalStatusTrackers_ApprovalStatusTypes_ApprovalSta~",
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClaimApprovalStatusTrackers_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -958,7 +1015,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClaimApprovalStatusTrackers_Employees_ProjManagerId",
                         column: x => x.ProjManagerId,
@@ -970,9 +1027,9 @@ namespace AtoCash.Migrations
                         column: x => x.RoleId,
                         principalTable: "JobRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClaimApprovalStatusTrackers_PettyCashRequests_PettyCashRequestId",
+                        name: "FK_ClaimApprovalStatusTrackers_PettyCashRequests_PettyCashRequ~",
                         column: x => x.PettyCashRequestId,
                         principalTable: "PettyCashRequests",
                         principalColumn: "Id",
@@ -1001,51 +1058,51 @@ namespace AtoCash.Migrations
                 name: "DisbursementsAndClaimsMasters",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    PettyCashRequestId = table.Column<int>(type: "int", nullable: true),
-                    ExpenseReimburseReqId = table.Column<int>(type: "int", nullable: true),
-                    RequestTypeId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    RecordDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CurrencyTypeId = table.Column<int>(type: "int", nullable: false),
-                    ClaimAmount = table.Column<double>(type: "float", nullable: false),
-                    AmountToWallet = table.Column<double>(type: "float", nullable: true),
-                    AmountToCredit = table.Column<double>(type: "float", nullable: true),
-                    IsSettledAmountCredited = table.Column<bool>(type: "bit", nullable: true),
-                    SettledDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SettlementComment = table.Column<string>(type: "nvarchar(150)", nullable: true),
-                    SettlementAccount = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SettlementBankCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdditionalData = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CostCenterId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalStatusId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    PettyCashRequestId = table.Column<int>(type: "integer", nullable: true),
+                    ExpenseReimburseReqId = table.Column<int>(type: "integer", nullable: true),
+                    RequestTypeId = table.Column<int>(type: "integer", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    RecordDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CurrencyTypeId = table.Column<int>(type: "integer", nullable: false),
+                    ClaimAmount = table.Column<double>(type: "double precision", nullable: false),
+                    AmountToWallet = table.Column<double>(type: "double precision", nullable: true),
+                    AmountToCredit = table.Column<double>(type: "double precision", nullable: true),
+                    IsSettledAmountCredited = table.Column<bool>(type: "boolean", nullable: true),
+                    SettledDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    SettlementComment = table.Column<string>(type: "varchar(150)", nullable: true),
+                    SettlementAccount = table.Column<string>(type: "varchar(150)", nullable: true),
+                    SettlementBankCard = table.Column<string>(type: "varchar(150)", nullable: true),
+                    AdditionalData = table.Column<string>(type: "varchar(150)", nullable: true),
+                    CostCenterId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalStatusId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DisbursementsAndClaimsMasters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DisbursementsAndClaimsMasters_ApprovalStatusTypes_ApprovalStatusId",
+                        name: "FK_DisbursementsAndClaimsMasters_ApprovalStatusTypes_ApprovalS~",
                         column: x => x.ApprovalStatusId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DisbursementsAndClaimsMasters_CostCenters_CostCenterId",
                         column: x => x.CostCenterId,
                         principalTable: "CostCenters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DisbursementsAndClaimsMasters_CurrencyTypes_CurrencyTypeId",
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DisbursementsAndClaimsMasters_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -1057,15 +1114,15 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DisbursementsAndClaimsMasters_ExpenseReimburseRequests_ExpenseReimburseReqId",
+                        name: "FK_DisbursementsAndClaimsMasters_ExpenseReimburseRequests_Expe~",
                         column: x => x.ExpenseReimburseReqId,
                         principalTable: "ExpenseReimburseRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_DisbursementsAndClaimsMasters_PettyCashRequests_PettyCashRequestId",
+                        name: "FK_DisbursementsAndClaimsMasters_PettyCashRequests_PettyCashRe~",
                         column: x => x.PettyCashRequestId,
                         principalTable: "PettyCashRequests",
                         principalColumn: "Id",
@@ -1081,7 +1138,7 @@ namespace AtoCash.Migrations
                         column: x => x.RequestTypeId,
                         principalTable: "RequestTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DisbursementsAndClaimsMasters_SubProjects_SubProjectId",
                         column: x => x.SubProjectId,
@@ -1100,24 +1157,24 @@ namespace AtoCash.Migrations
                 name: "TravelApprovalStatusTrackers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    TravelApprovalRequestId = table.Column<int>(type: "int", nullable: false),
-                    TravelStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TravelEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: true),
-                    ProjManagerId = table.Column<int>(type: "int", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: true),
-                    SubProjectId = table.Column<int>(type: "int", nullable: true),
-                    WorkTaskId = table.Column<int>(type: "int", nullable: true),
-                    ApprovalGroupId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ApprovalLevelId = table.Column<int>(type: "int", nullable: false),
-                    ReqDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FinalApprovedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApprovalStatusTypeId = table.Column<int>(type: "int", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EmployeeId = table.Column<int>(type: "integer", nullable: false),
+                    TravelApprovalRequestId = table.Column<int>(type: "integer", nullable: false),
+                    TravelStartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    TravelEndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true),
+                    ProjManagerId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: true),
+                    SubProjectId = table.Column<int>(type: "integer", nullable: true),
+                    WorkTaskId = table.Column<int>(type: "integer", nullable: true),
+                    ApprovalGroupId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    ApprovalLevelId = table.Column<int>(type: "integer", nullable: false),
+                    ReqDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    FinalApprovedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ApprovalStatusTypeId = table.Column<int>(type: "integer", nullable: false),
+                    Comments = table.Column<string>(type: "varchar(250)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1127,13 +1184,13 @@ namespace AtoCash.Migrations
                         column: x => x.ApprovalLevelId,
                         principalTable: "ApprovalLevels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TravelApprovalStatusTrackers_ApprovalStatusTypes_ApprovalStatusTypeId",
+                        name: "FK_TravelApprovalStatusTrackers_ApprovalStatusTypes_ApprovalSt~",
                         column: x => x.ApprovalStatusTypeId,
                         principalTable: "ApprovalStatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalStatusTrackers_Departments_DepartmentId",
                         column: x => x.DepartmentId,
@@ -1145,7 +1202,7 @@ namespace AtoCash.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalStatusTrackers_Employees_ProjManagerId",
                         column: x => x.ProjManagerId,
@@ -1157,7 +1214,7 @@ namespace AtoCash.Migrations
                         column: x => x.RoleId,
                         principalTable: "JobRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalStatusTrackers_Projects_ProjectId",
                         column: x => x.ProjectId,
@@ -1171,11 +1228,11 @@ namespace AtoCash.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TravelApprovalStatusTrackers_TravelApprovalRequests_TravelApprovalRequestId",
+                        name: "FK_TravelApprovalStatusTrackers_TravelApprovalRequests_TravelA~",
                         column: x => x.TravelApprovalRequestId,
                         principalTable: "TravelApprovalRequests",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TravelApprovalStatusTrackers_WorkTasks_WorkTaskId",
                         column: x => x.WorkTaskId,
@@ -1208,8 +1265,7 @@ namespace AtoCash.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -1235,8 +1291,7 @@ namespace AtoCash.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClaimApprovalStatusTrackers_ApprovalLevelId",
@@ -1404,6 +1459,11 @@ namespace AtoCash.Migrations
                 column: "ApprovalStatusTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExpenseReimburseRequests_CostCenterId",
+                table: "ExpenseReimburseRequests",
+                column: "CostCenterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExpenseReimburseRequests_CurrencyTypeId",
                 table: "ExpenseReimburseRequests",
                 column: "CurrencyTypeId");
@@ -1489,6 +1549,21 @@ namespace AtoCash.Migrations
                 column: "WorkTaskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_CostCenterId",
+                table: "ExpenseSubClaims",
+                column: "CostCenterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_DepartmentId",
+                table: "ExpenseSubClaims",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_EmployeeId",
+                table: "ExpenseSubClaims",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExpenseSubClaims_ExpenseReimburseRequestId",
                 table: "ExpenseSubClaims",
                 column: "ExpenseReimburseRequestId");
@@ -1499,6 +1574,21 @@ namespace AtoCash.Migrations
                 column: "ExpenseTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_ProjectId",
+                table: "ExpenseSubClaims",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_SubProjectId",
+                table: "ExpenseSubClaims",
+                column: "SubProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseSubClaims_WorkTaskId",
+                table: "ExpenseSubClaims",
+                column: "WorkTaskId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExpenseTypes_StatusTypeId",
                 table: "ExpenseTypes",
                 column: "StatusTypeId");
@@ -1507,6 +1597,11 @@ namespace AtoCash.Migrations
                 name: "IX_PettyCashRequests_ApprovalStatusTypeId",
                 table: "PettyCashRequests",
                 column: "ApprovalStatusTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PettyCashRequests_CostCenterId",
+                table: "PettyCashRequests",
+                column: "CostCenterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PettyCashRequests_CurrencyTypeId",

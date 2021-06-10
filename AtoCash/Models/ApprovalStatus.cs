@@ -19,10 +19,10 @@ namespace AtoCash.Models
         public int Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(25)")]
+        [Column(TypeName = "varchar(25)")]
         public string Status { get; set; }
 
-        [Column(TypeName = "nvarchar(100)")]
+        [Column(TypeName = "varchar(100)")]
         public string StatusDesc { get; set; }
 
 

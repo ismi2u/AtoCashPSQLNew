@@ -74,13 +74,13 @@ namespace AtoCash.Models
         public bool? IsSettledAmountCredited { get; set; }
         public DateTime? SettledDate { get; set; }
 
-        [Column(TypeName = "nvarchar(150)")]
+        [Column(TypeName = "varchar(150)")]
         public string SettlementComment { get; set; }
-        [Column(TypeName = "nvarchar(150)")]
+        [Column(TypeName = "varchar(150)")]
         public string SettlementAccount { get; set; }
-        [Column(TypeName = "nvarchar(150)")]
+        [Column(TypeName = "varchar(150)")]
         public string SettlementBankCard { get; set; }
-        [Column(TypeName = "nvarchar(150)")]
+        [Column(TypeName = "varchar(150)")]
         public string AdditionalData { get; set; }
 
 
@@ -111,7 +111,7 @@ namespace AtoCash.Models
         public string RequestType { get; set; }
 
         public int? DepartmentId { get; set; }
-        public string Department { get; set; }
+        public string DepartmentName { get; set; }
         public int? ProjectId { get; set; }
         public string ProjectName { get; set; }
 
@@ -147,6 +147,8 @@ namespace AtoCash.Models
         public int ApprovalStatusId { get; set; }
 
         public string ApprovalStatusType { get; set; }
+
+        public string RequestTitleDescription { get; set; }
 
     }
 }

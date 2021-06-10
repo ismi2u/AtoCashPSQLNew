@@ -275,8 +275,6 @@ namespace AtoCash.Controllers
         public async Task<IActionResult> GetEmployeesReport(EmployeeSearchModel searchModel)
         {
 
-
-
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<Employee>();
 
@@ -341,8 +339,8 @@ namespace AtoCash.Controllers
                     employeeDTO.EmploymentType = employee.EmploymentTypeId != 0 ? _context.EmploymentTypes.Find(employee.EmploymentTypeId).EmpJobTypeCode + ":" + _context.EmploymentTypes.Find(employee.EmploymentTypeId).EmpJobTypeDesc : string.Empty;
                     employeeDTO.Department = employee.DepartmentId != 0 ? _context.Departments.Find(employee.DepartmentId).DeptCode + ":" + _context.Departments.Find(employee.DepartmentId).DeptName : string.Empty;
                     employeeDTO.JobRole = employee.RoleId != 0 ? _context.JobRoles.Find(employee.RoleId).RoleCode + ":" + _context.JobRoles.Find(employee.RoleId).RoleName : string.Empty;
-                    employeeDTO.ApprovalGroup = employeeDTO.ApprovalGroupId != 0 ? _context.ApprovalGroups.Find(employeeDTO.ApprovalGroupId).ApprovalGroupCode : string.Empty;
-                    employeeDTO.StatusType = employeeDTO.StatusTypeId != 0 ? _context.StatusTypes.Find(employeeDTO.StatusTypeId).Status : string.Empty;
+                    employeeDTO.ApprovalGroup = employee.ApprovalGroupId != 0 ? _context.ApprovalGroups.Find(employee.ApprovalGroupId).ApprovalGroupCode : string.Empty;
+                    employeeDTO.StatusType = employee.StatusTypeId != 0 ? _context.StatusTypes.Find(employee.StatusTypeId).Status : string.Empty;
 
                     ListEmployeeDto.Add(employeeDTO);
                 }
@@ -476,8 +474,8 @@ namespace AtoCash.Controllers
                     employeeDTO.EmploymentType = employee.EmploymentTypeId != 0 ? _context.EmploymentTypes.Find(employee.EmploymentTypeId).EmpJobTypeCode + ":" + _context.EmploymentTypes.Find(employee.EmploymentTypeId).EmpJobTypeDesc : string.Empty;
                     employeeDTO.Department = employee.DepartmentId != 0 ? _context.Departments.Find(employee.DepartmentId).DeptCode + ":" + _context.Departments.Find(employee.DepartmentId).DeptName : string.Empty;
                     employeeDTO.JobRole = employee.RoleId != 0 ? _context.JobRoles.Find(employee.RoleId).RoleCode + ":" + _context.JobRoles.Find(employee.RoleId).RoleName : string.Empty;
-                    employeeDTO.ApprovalGroup = employeeDTO.ApprovalGroupId != 0 ? _context.ApprovalGroups.Find(employeeDTO.ApprovalGroupId).ApprovalGroupCode : string.Empty;
-                    employeeDTO.StatusType = employeeDTO.StatusTypeId != 0 ? _context.StatusTypes.Find(employeeDTO.StatusTypeId).Status : string.Empty;
+                    employeeDTO.ApprovalGroup = employee.ApprovalGroupId != 0 ? _context.ApprovalGroups.Find(employee.ApprovalGroupId).ApprovalGroupCode : string.Empty;
+                    employeeDTO.StatusType = employee.StatusTypeId != 0 ? _context.StatusTypes.Find(employee.StatusTypeId).Status : string.Empty;
 
                     ListEmployeeDto.Add(employeeDTO);
                 }
@@ -568,7 +566,7 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.RequestTypeId = disb.RequestTypeId;
                         disbursementsAndClaimsMasterDTO.RequestType = _context.RequestTypes.Find(disb.RequestTypeId).RequestName;
                         disbursementsAndClaimsMasterDTO.DepartmentId = disb.DepartmentId;
-                        disbursementsAndClaimsMasterDTO.Department = disb.DepartmentId != null ? _context.Departments.Find(disb.DepartmentId).DeptCode : null;
+                        disbursementsAndClaimsMasterDTO.DepartmentName = disb.DepartmentId != null ? _context.Departments.Find(disb.DepartmentId).DeptCode : null;
                         disbursementsAndClaimsMasterDTO.ProjectId = disb.ProjectId;
                         disbursementsAndClaimsMasterDTO.ProjectName = disb.ProjectId != null ? _context.Projects.Find(disb.ProjectId).ProjectName : null;
                         disbursementsAndClaimsMasterDTO.SubProjectId = disb.SubProjectId;
@@ -588,10 +586,21 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disb.IsSettledAmountCredited ?? false;
                         disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate;
                         disbursementsAndClaimsMasterDTO.SettlementComment = disb.SettlementComment;
-                        ListDisbItemsDTO.Add(disbursementsAndClaimsMasterDTO);
+
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
                         disbursementsAndClaimsMasterDTO.SettlementBankCard = disb.SettlementBankCard;
                         disbursementsAndClaimsMasterDTO.AdditionalData = disb.AdditionalData;
+
+                        if (searchModel.RequestTypeId == 1)
+                        {
+                            disbursementsAndClaimsMasterDTO.RequestTitleDescription = _context.PettyCashRequests.Find(disb.PettyCashRequestId).Comments;
+                        }
+                        else
+                        {
+                            disbursementsAndClaimsMasterDTO.RequestTitleDescription = _context.ExpenseReimburseRequests.Find(disb.ExpenseReimburseReqId).ExpenseReportTitle;
+                        }
+
+                        ListDisbItemsDTO.Add(disbursementsAndClaimsMasterDTO);
                     }
 
                 });
@@ -682,7 +691,7 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.RequestTypeId = disb.RequestTypeId;
                         disbursementsAndClaimsMasterDTO.RequestType = _context.RequestTypes.Find(disb.RequestTypeId).RequestName;
                         disbursementsAndClaimsMasterDTO.DepartmentId = disb.DepartmentId;
-                        disbursementsAndClaimsMasterDTO.Department = disb.DepartmentId != null ? _context.Departments.Find(disb.DepartmentId).DeptCode : null;
+                        disbursementsAndClaimsMasterDTO.DepartmentName = disb.DepartmentId != null ? _context.Departments.Find(disb.DepartmentId).DeptCode : null;
                         disbursementsAndClaimsMasterDTO.ProjectId = disb.ProjectId;
                         disbursementsAndClaimsMasterDTO.ProjectName = disb.ProjectId != null ? _context.Projects.Find(disb.ProjectId).ProjectName : null;
                         disbursementsAndClaimsMasterDTO.SubProjectId = disb.SubProjectId;
@@ -705,6 +714,16 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
                         disbursementsAndClaimsMasterDTO.SettlementBankCard = disb.SettlementBankCard;
                         disbursementsAndClaimsMasterDTO.AdditionalData = disb.AdditionalData;
+
+                        if (searchModel.RequestTypeId == 1)
+                        {
+                            disbursementsAndClaimsMasterDTO.RequestTitleDescription = _context.PettyCashRequests.Find(disb.PettyCashRequestId).Comments;
+                        }
+                        else
+                        {
+                            disbursementsAndClaimsMasterDTO.RequestTitleDescription = _context.ExpenseReimburseRequests.Find(disb.ExpenseReimburseReqId).ExpenseReportTitle;
+                        }
+
                         ListDisbItemsDTO.Add(disbursementsAndClaimsMasterDTO);
                     }
 
@@ -713,7 +732,7 @@ namespace AtoCash.Controllers
 
 
                 DataTable dt = new();
-                dt.Columns.AddRange(new DataColumn[21]
+                dt.Columns.AddRange(new DataColumn[22]
                     {
                     //new DataColumn("Id", typeof(int)),
                     new DataColumn("EmployeeName", typeof(string)),
@@ -734,9 +753,10 @@ namespace AtoCash.Controllers
                     new DataColumn("IsSettledAmountCredited", typeof(bool)),
                     new DataColumn("SettledDate", typeof(DateTime)),
                     new DataColumn("SettlementComment", typeof(string)),
-                    new DataColumn("SettlementAccount", typeof(DateTime)),
-                    new DataColumn("SettlementBankCard", typeof(DateTime)),
-                    new DataColumn("AdditionalData", typeof(DateTime))
+                    new DataColumn("SettlementAccount", typeof(string)),
+                    new DataColumn("SettlementBankCard", typeof(string)),
+                    new DataColumn("AdditionalData", typeof(string)),
+                    new DataColumn("TitleDescription", typeof(string))
                     });
 
 
@@ -747,7 +767,7 @@ namespace AtoCash.Controllers
                         disbItem.PettyCashRequestId,
                         disbItem.ExpenseReimburseReqId,
                         disbItem.RequestType,
-                        disbItem.Department,
+                        disbItem.DepartmentName,
                         disbItem.ProjectName,
                         disbItem.SubProjectName,
                         disbItem.WorkTaskName,
@@ -763,7 +783,8 @@ namespace AtoCash.Controllers
                         disbItem.SettlementComment,
                         disbItem.SettlementAccount,
                         disbItem.SettlementBankCard,
-                        disbItem.AdditionalData
+                        disbItem.AdditionalData,
+                        disbItem.RequestTitleDescription
                         );
                 }
                 // Creating the Excel workbook 
@@ -851,13 +872,13 @@ namespace AtoCash.Controllers
                     travelItemDTO.EmployeeName = _context.Employees.Find(travel.EmployeeId).GetFullName();
 
                     travelItemDTO.DepartmentId = travel.DepartmentId;
-                    travelItemDTO.Department = travel.DepartmentId != null ? _context.Departments.Find(travel.DepartmentId).DeptName : null;
+                    travelItemDTO.DepartmentName = travel.DepartmentId != null ? _context.Departments.Find(travel.DepartmentId).DeptName : null;
                     travelItemDTO.ProjectId = travel.ProjectId;
-                    travelItemDTO.Project = travel.ProjectId != null ? _context.Projects.Find(travel.ProjectId).ProjectName : null;
+                    travelItemDTO.ProjectName = travel.ProjectId != null ? _context.Projects.Find(travel.ProjectId).ProjectName : null;
                     travelItemDTO.SubProjectId = travel.SubProjectId;
-                    travelItemDTO.SubProject = travel.SubProjectId != null ? _context.SubProjects.Find(travel.SubProjectId).SubProjectName : null;
+                    travelItemDTO.SubProjectName = travel.SubProjectId != null ? _context.SubProjects.Find(travel.SubProjectId).SubProjectName : null;
                     travelItemDTO.WorkTaskId = travel.WorkTaskId;
-                    travelItemDTO.WorkTask = travel.WorkTaskId != null ? _context.WorkTasks.Find(travel.WorkTaskId).TaskName : null;
+                    travelItemDTO.WorkTaskName = travel.WorkTaskId != null ? _context.WorkTasks.Find(travel.WorkTaskId).TaskName : null;
                     travelItemDTO.CostCenterId = travel.CostCenterId;
                     travelItemDTO.CostCenter = travel.CostCenterId != 0 ? _context.CostCenters.Find(travel.CostCenterId).CostCenterCode : null;
                     travelItemDTO.ApprovalStatusTypeId = travel.ApprovalStatusTypeId;
@@ -942,13 +963,13 @@ namespace AtoCash.Controllers
                     travelItemDTO.EmployeeName = _context.Employees.Find(travel.EmployeeId).GetFullName();
 
                     travelItemDTO.DepartmentId = travel.DepartmentId;
-                    travelItemDTO.Department = travel.DepartmentId != null ? _context.Departments.Find(travel.DepartmentId).DeptName : null;
+                    travelItemDTO.DepartmentName = travel.DepartmentId != null ? _context.Departments.Find(travel.DepartmentId).DeptName : null;
                     travelItemDTO.ProjectId = travel.ProjectId;
-                    travelItemDTO.Project = travel.ProjectId != null ? _context.Projects.Find(travel.ProjectId).ProjectName : null;
+                    travelItemDTO.ProjectName = travel.ProjectId != null ? _context.Projects.Find(travel.ProjectId).ProjectName : null;
                     travelItemDTO.SubProjectId = travel.SubProjectId;
-                    travelItemDTO.SubProject = travel.SubProjectId != null ? _context.SubProjects.Find(travel.SubProjectId).SubProjectName : null;
+                    travelItemDTO.SubProjectName = travel.SubProjectId != null ? _context.SubProjects.Find(travel.SubProjectId).SubProjectName : null;
                     travelItemDTO.WorkTaskId = travel.WorkTaskId;
-                    travelItemDTO.WorkTask = travel.WorkTaskId != null ? _context.WorkTasks.Find(travel.WorkTaskId).TaskName : null;
+                    travelItemDTO.WorkTaskName = travel.WorkTaskId != null ? _context.WorkTasks.Find(travel.WorkTaskId).TaskName : null;
                     travelItemDTO.CostCenterId = travel.CostCenterId;
                     travelItemDTO.CostCenter = travel.CostCenterId != 0 ? _context.CostCenters.Find(travel.CostCenterId).CostCenterCode : null;
                     travelItemDTO.ApprovalStatusTypeId = travel.ApprovalStatusTypeId;
@@ -986,10 +1007,10 @@ namespace AtoCash.Controllers
                     travelItem.TravelStartDate,
                     travelItem.TravelEndDate,
                     travelItem.TravelPurpose,
-                    travelItem.Department,
-                    travelItem.Project,
-                    travelItem.SubProject,
-                    travelItem.WorkTask,
+                    travelItem.DepartmentName,
+                    travelItem.ProjectName,
+                    travelItem.SubProjectName,
+                    travelItem.WorkTaskName,
                     travelItem.ReqRaisedDate,
                     travelItem.CostCenter,
                     travelItem.ApprovalStatusType
@@ -1030,9 +1051,9 @@ namespace AtoCash.Controllers
             predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (searchModel.SettledAccountsFrom.HasValue)
-                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
+                predicate = predicate.And(x => x.SettledDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
-                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
+                predicate = predicate.And(x => x.SettledDate <= searchModel.SettledAccountsTo);
 
             if (predicate.IsStarted)
             {
@@ -1053,7 +1074,7 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
                 disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
                 disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
-                disbursementsAndClaimsMasterDTO.Department = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
+                disbursementsAndClaimsMasterDTO.DepartmentName = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
                 disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
                 disbursementsAndClaimsMasterDTO.ProjectName = disbursementsAndClaimsMaster.ProjectId != null ? _context.Projects.Find(disbursementsAndClaimsMaster.ProjectId).ProjectName : string.Empty;
                 disbursementsAndClaimsMasterDTO.SubProjectId = disbursementsAndClaimsMaster.SubProjectId;
@@ -1081,7 +1102,7 @@ namespace AtoCash.Controllers
 
             }
 
-            return Ok(ListDisbursementsAndClaimsMasterDTO);
+            return Ok(ListDisbursementsAndClaimsMasterDTO.OrderByDescending(x=> x.SettledDate).ToList());
         }
 
         // GET: api/DisbursementsAndClaimsMasters
@@ -1089,7 +1110,7 @@ namespace AtoCash.Controllers
         [ActionName("AccountsPayableReport")]
         public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableReport(AccountsPayableSearchModel searchModel)
         {
-            
+
 
             List<DisbursementsAndClaimsMaster> result = new();
             List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
@@ -1102,21 +1123,21 @@ namespace AtoCash.Controllers
             {
                 predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
             }
-            
+
             if (searchModel.SettledAccountsFrom.HasValue)
-                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
+                predicate = predicate.And(x => x.SettledDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
-                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
+                predicate = predicate.And(x => x.SettledDate <= searchModel.SettledAccountsTo);
 
             predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (predicate.IsStarted)
             {
-                result =   _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
+                result = _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
             }
             else
             {
-                result =  _context.DisbursementsAndClaimsMasters.ToList();
+                result = _context.DisbursementsAndClaimsMasters.ToList();
             }
 
 
@@ -1129,7 +1150,7 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
                 disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
                 disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
-                disbursementsAndClaimsMasterDTO.Department = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
+                disbursementsAndClaimsMasterDTO.DepartmentName = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
                 disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
                 disbursementsAndClaimsMasterDTO.ProjectName = disbursementsAndClaimsMaster.ProjectId != null ? _context.Projects.Find(disbursementsAndClaimsMaster.ProjectId).ProjectName : string.Empty;
                 disbursementsAndClaimsMasterDTO.SubProjectId = disbursementsAndClaimsMaster.SubProjectId;
@@ -1193,7 +1214,7 @@ namespace AtoCash.Controllers
                     disbItem.PettyCashRequestId,
                     disbItem.ExpenseReimburseReqId,
                     disbItem.RequestType,
-                    disbItem.Department,
+                    disbItem.DepartmentName,
                     disbItem.ProjectName,
                     disbItem.SubProjectName,
                     disbItem.WorkTaskName,
@@ -1230,19 +1251,25 @@ namespace AtoCash.Controllers
         public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsData(ExpenseSubClaimsSearchModel searchModel)
         {
 
-
             List<ExpenseSubClaim> result = new();
             List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<ExpenseSubClaim>();
 
-            if (searchModel.ExpenseTypeId != 0 || searchModel.ExpenseTypeId != null)
-                predicate = predicate.And(x => x.ExpenseTypeId == searchModel.ExpenseTypeId);
-            if (searchModel.ExpenseReimbClaimAmountFrom.HasValue)
+            if (searchModel.ExpenseTypeId != null && searchModel.ExpenseTypeId != 0)
+                predicate = predicate.And(x => x.ExpenseTypeId  != searchModel.ExpenseTypeId);
+            if (searchModel.EmpId != null && searchModel.EmpId != 0)
+                predicate = predicate.And(x => x.EmployeeId != searchModel.EmpId);
+            if (searchModel.ExpenseTypeId != null && searchModel.CostCenterId != 0 )
+                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
+            if (searchModel.ExpenseReimbClaimAmountFrom > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
-            if (searchModel.ExpenseReimbClaimAmountTo.HasValue)
+            if (searchModel.ExpenseReimbClaimAmountTo > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountTo);
+            if (searchModel.CostCenterId != null && searchModel.CostCenterId != 0)
+                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
+
 
 
             if (predicate.IsStarted)
@@ -1255,19 +1282,21 @@ namespace AtoCash.Controllers
             }
 
 
-            foreach (ExpenseSubClaim expenseSubClaim in result)
+            foreach (var expenseSubClaim in result)
             {
                 ExpenseSubClaimDTO expenseSubClaimDTO = new();
+                //string empName = _context.Employees.Find(expenseSubClaim.EmployeeId).GetFullName();
+                //string curCode = _context.CurrencyTypes.Find(expenseSubClaim.CurrencyTypeId).CurrencyCode;
 
-                var expReimReqId = _context.ExpenseSubClaims.Find(expenseSubClaim.Id).ExpenseReimburseRequestId;
-                var expReimRequest = _context.ExpenseReimburseRequests.Find(expReimReqId);
 
-                expenseSubClaimDTO.ExpenseReimburseReqId = expReimReqId;
+                var expReimReq = await _context.ExpenseReimburseRequests.FindAsync(expenseSubClaim.ExpenseReimburseRequestId);
+
+                expenseSubClaimDTO.ExpenseReimburseReqId = expenseSubClaim.ExpenseReimburseRequestId;
                 expenseSubClaimDTO.Id = expenseSubClaim.Id;
-                expenseSubClaimDTO.EmployeeId = expReimRequest.EmployeeId;
-                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expReimRequest.EmployeeId).GetFullName();
+                expenseSubClaimDTO.EmployeeId = expenseSubClaim.EmployeeId;
+                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expenseSubClaim.EmployeeId).GetFullName();
                 expenseSubClaimDTO.ExpenseReimbClaimAmount = expenseSubClaim.ExpenseReimbClaimAmount;
-                expenseSubClaimDTO.ExpReimReqDate = expReimRequest.ExpReimReqDate;
+                expenseSubClaimDTO.ExpReimReqDate = expReimReq.ExpReimReqDate;
                 expenseSubClaimDTO.InvoiceNo = expenseSubClaim.InvoiceNo;
                 expenseSubClaimDTO.InvoiceDate = expenseSubClaim.InvoiceDate;
                 expenseSubClaimDTO.Tax = expenseSubClaim.Tax;
@@ -1275,24 +1304,27 @@ namespace AtoCash.Controllers
                 expenseSubClaimDTO.Vendor = expenseSubClaim.Vendor;
                 expenseSubClaimDTO.Location = expenseSubClaim.Location;
                 expenseSubClaimDTO.Description = expenseSubClaim.Description;
-                expenseSubClaimDTO.CurrencyTypeId = expReimRequest.CurrencyTypeId;
-                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimRequest.CurrencyTypeId).CurrencyCode;
+                expenseSubClaimDTO.CurrencyTypeId = expReimReq.CurrencyTypeId;
+                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimReq.CurrencyTypeId).CurrencyCode;
                 expenseSubClaimDTO.ExpenseTypeId = expenseSubClaim.ExpenseTypeId;
                 expenseSubClaimDTO.ExpenseType = _context.ExpenseTypes.Find(expenseSubClaim.ExpenseTypeId).ExpenseTypeName;
 
-                expenseSubClaimDTO.DepartmentId = expReimRequest.DepartmentId;
-                expenseSubClaimDTO.Department= expReimRequest.DepartmentId != null ? _context.Departments.Find(expReimRequest.DepartmentId).DeptName : string.Empty;
+                expenseSubClaimDTO.DepartmentId = expenseSubClaim.DepartmentId;
+                expenseSubClaimDTO.DepartmentName = expenseSubClaim.DepartmentId != null ? _context.Departments.Find(expenseSubClaim.DepartmentId).DeptName : string.Empty;
 
-                expenseSubClaimDTO.ProjectId = expReimRequest.ProjectId;
-                expenseSubClaimDTO.Project= expReimRequest.ProjectId != null ? _context.Projects.Find(expReimRequest.ProjectId).ProjectName : string.Empty;
+                expenseSubClaimDTO.ProjectId = expenseSubClaim.ProjectId;
+                expenseSubClaimDTO.ProjectName = expenseSubClaim.ProjectId != null ? _context.Projects.Find(expenseSubClaim.ProjectId).ProjectName : string.Empty;
+                
+                expenseSubClaimDTO.CostCenterId = expenseSubClaim.CostCenterId;
+                expenseSubClaimDTO.CostCenter = _context.CostCenters.Find(expenseSubClaim.CostCenterId).CostCenterCode;
 
-                expenseSubClaimDTO.SubProjectId = expReimRequest.SubProjectId;
-                expenseSubClaimDTO.SubProject= expReimRequest.SubProjectId != null ? _context.SubProjects.Find(expReimRequest.SubProjectId).SubProjectName : string.Empty;
+                expenseSubClaimDTO.SubProjectId = expenseSubClaim.SubProjectId;
+                expenseSubClaimDTO.SubProjectName = expenseSubClaim.SubProjectId != null ? _context.SubProjects.Find(expenseSubClaim.SubProjectId).SubProjectName : string.Empty;
 
-                expenseSubClaimDTO.WorkTaskId = expReimRequest.WorkTaskId;
-                expenseSubClaimDTO.WorkTask= expReimRequest.WorkTaskId != null ? _context.WorkTasks.Find(expReimRequest.WorkTaskId).TaskName : string.Empty;
+                expenseSubClaimDTO.WorkTaskId = expenseSubClaim.WorkTaskId;
+                expenseSubClaimDTO.WorkTaskName = expenseSubClaim.WorkTaskId != null ? _context.WorkTasks.Find(expenseSubClaim.WorkTaskId).TaskName : string.Empty;
 
-
+                ListExpenseSubClaimDTO.Add(expenseSubClaimDTO);
             }
 
             return Ok(ListExpenseSubClaimDTO);
@@ -1305,19 +1337,24 @@ namespace AtoCash.Controllers
         public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsReport(ExpenseSubClaimsSearchModel searchModel)
         {
 
-
             List<ExpenseSubClaim> result = new();
             List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<ExpenseSubClaim>();
 
-            if (searchModel.ExpenseTypeId !=0 || searchModel.ExpenseTypeId != null)
-                predicate = predicate.And(x => x.ExpenseTypeId == searchModel.ExpenseTypeId);
-            if (searchModel.ExpenseReimbClaimAmountFrom.HasValue)
+            if (searchModel.ExpenseTypeId != null && searchModel.ExpenseTypeId != 0)
+                predicate = predicate.And(x => x.ExpenseTypeId != searchModel.ExpenseTypeId);
+            if (searchModel.EmpId != null && searchModel.EmpId != 0)
+                predicate = predicate.And(x => x.EmployeeId != searchModel.EmpId);
+            if (searchModel.ExpenseTypeId != null && searchModel.CostCenterId != 0)
+                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
+            if (searchModel.ExpenseReimbClaimAmountFrom > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
-            if (searchModel.ExpenseReimbClaimAmountTo.HasValue)
+            if (searchModel.ExpenseReimbClaimAmountTo > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountTo);
+            if (searchModel.CostCenterId != null && searchModel.CostCenterId != 0)
+                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
 
 
             if (predicate.IsStarted)
@@ -1330,19 +1367,21 @@ namespace AtoCash.Controllers
             }
 
 
-            foreach (ExpenseSubClaim expenseSubClaim in result)
+            foreach (var expenseSubClaim in result)
             {
                 ExpenseSubClaimDTO expenseSubClaimDTO = new();
+                //string empName = _context.Employees.Find(expenseSubClaim.EmployeeId).GetFullName();
+                //string curCode = _context.CurrencyTypes.Find(expenseSubClaim.CurrencyTypeId).CurrencyCode;
 
-                var expReimReqId = _context.ExpenseSubClaims.Find(expenseSubClaim.Id).ExpenseReimburseRequestId;
-                var expReimRequest = _context.ExpenseReimburseRequests.Find(expReimReqId);
 
-                expenseSubClaimDTO.ExpenseReimburseReqId = expReimReqId;
+                var expReimReq = await _context.ExpenseReimburseRequests.FindAsync(expenseSubClaim.ExpenseReimburseRequestId);
+
+                expenseSubClaimDTO.ExpenseReimburseReqId = expenseSubClaim.ExpenseReimburseRequestId;
                 expenseSubClaimDTO.Id = expenseSubClaim.Id;
-                expenseSubClaimDTO.EmployeeId = expReimRequest.EmployeeId;
-                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expReimRequest.EmployeeId).GetFullName();
+                expenseSubClaimDTO.EmployeeId = expenseSubClaim.EmployeeId;
+                expenseSubClaimDTO.EmployeeName = _context.Employees.Find(expenseSubClaim.EmployeeId).GetFullName();
                 expenseSubClaimDTO.ExpenseReimbClaimAmount = expenseSubClaim.ExpenseReimbClaimAmount;
-                expenseSubClaimDTO.ExpReimReqDate = expReimRequest.ExpReimReqDate;
+                expenseSubClaimDTO.ExpReimReqDate = expReimReq.ExpReimReqDate;
                 expenseSubClaimDTO.InvoiceNo = expenseSubClaim.InvoiceNo;
                 expenseSubClaimDTO.InvoiceDate = expenseSubClaim.InvoiceDate;
                 expenseSubClaimDTO.Tax = expenseSubClaim.Tax;
@@ -1350,29 +1389,34 @@ namespace AtoCash.Controllers
                 expenseSubClaimDTO.Vendor = expenseSubClaim.Vendor;
                 expenseSubClaimDTO.Location = expenseSubClaim.Location;
                 expenseSubClaimDTO.Description = expenseSubClaim.Description;
-                expenseSubClaimDTO.CurrencyTypeId = expReimRequest.CurrencyTypeId;
-                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimRequest.CurrencyTypeId).CurrencyCode;
+                expenseSubClaimDTO.CurrencyTypeId = expReimReq.CurrencyTypeId;
+                expenseSubClaimDTO.CurrencyType = _context.CurrencyTypes.Find(expReimReq.CurrencyTypeId).CurrencyCode;
                 expenseSubClaimDTO.ExpenseTypeId = expenseSubClaim.ExpenseTypeId;
                 expenseSubClaimDTO.ExpenseType = _context.ExpenseTypes.Find(expenseSubClaim.ExpenseTypeId).ExpenseTypeName;
-                
-                expenseSubClaimDTO.DepartmentId = expReimRequest.DepartmentId;
-                expenseSubClaimDTO.Department= expReimRequest.DepartmentId !=null ? _context.Departments.Find(expReimRequest.DepartmentId).DeptName: string.Empty;
 
-                expenseSubClaimDTO.ProjectId = expReimRequest.ProjectId;
-                expenseSubClaimDTO.Project= expReimRequest.ProjectId != null ? _context.Projects.Find(expReimRequest.ProjectId).ProjectName : string.Empty;
+                expenseSubClaimDTO.DepartmentId = expenseSubClaim.DepartmentId;
+                expenseSubClaimDTO.DepartmentName = expenseSubClaim.DepartmentId != null ? _context.Departments.Find(expenseSubClaim.DepartmentId).DeptName : string.Empty;
 
-                expenseSubClaimDTO.SubProjectId = expReimRequest.SubProjectId;
-                expenseSubClaimDTO.SubProject= expReimRequest.SubProjectId != null ? _context.SubProjects.Find(expReimRequest.SubProjectId).SubProjectName : string.Empty;
+                expenseSubClaimDTO.ProjectId = expenseSubClaim.ProjectId;
+                expenseSubClaimDTO.ProjectName = expenseSubClaim.ProjectId != null ? _context.Projects.Find(expenseSubClaim.ProjectId).ProjectName : string.Empty;
 
-                expenseSubClaimDTO.WorkTaskId = expReimRequest.WorkTaskId;
-                expenseSubClaimDTO.WorkTask= expReimRequest.WorkTaskId != null ? _context.WorkTasks.Find(expReimRequest.WorkTaskId).TaskName : string.Empty;
+                expenseSubClaimDTO.CostCenterId = expenseSubClaim.CostCenterId;
+                expenseSubClaimDTO.CostCenter = _context.CostCenters.Find(expenseSubClaim.CostCenterId).CostCenterCode;
 
+                expenseSubClaimDTO.SubProjectId = expenseSubClaim.SubProjectId;
+                expenseSubClaimDTO.SubProjectName = expenseSubClaim.SubProjectId != null ? _context.SubProjects.Find(expenseSubClaim.SubProjectId).SubProjectName : string.Empty;
 
+                expenseSubClaimDTO.WorkTaskId = expenseSubClaim.WorkTaskId;
+                expenseSubClaimDTO.WorkTaskName = expenseSubClaim.WorkTaskId != null ? _context.WorkTasks.Find(expenseSubClaim.WorkTaskId).TaskName : string.Empty;
+
+                ListExpenseSubClaimDTO.Add(expenseSubClaimDTO);
             }
 
 
+
+
             DataTable dt = new();
-            dt.Columns.AddRange(new DataColumn[18]
+            dt.Columns.AddRange(new DataColumn[19]
                 {
                     //new DataColumn("Id", typeof(int)),
                     new DataColumn("ExpenseReimburseId", typeof(int)),
@@ -1389,6 +1433,7 @@ namespace AtoCash.Controllers
                     new DataColumn("CurrencyType",typeof(string)),
                     new DataColumn("ExpenseType", typeof(string)),
                     new DataColumn("Department",typeof(string)),
+                    new DataColumn("CostCenter",typeof(string)),
                     new DataColumn("Project",typeof(string)),
                     new DataColumn("SubProject", typeof(string)),
                     new DataColumn("WorkTask",typeof(string)),
@@ -1412,10 +1457,11 @@ namespace AtoCash.Controllers
                     claimItem.Location,
                     claimItem.CurrencyType,
                     claimItem.ExpenseType,
-                    claimItem.Department,
-                    claimItem.Project,
-                    claimItem.SubProject,
-                    claimItem.WorkTask,
+                    claimItem.CostCenter,
+                    claimItem.DepartmentName,
+                    claimItem.ProjectName,
+                    claimItem.SubProjectName,
+                    claimItem.WorkTaskName,
                     claimItem.Description
                     );
             }

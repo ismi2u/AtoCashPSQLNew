@@ -101,7 +101,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
 
         [HttpGet("{id}")]
         [ActionName("ApprovalsPendingForApprover")]
-        public ActionResult<IEnumerable<ClaimApprovalStatusTrackerDTO>> GetPendingApprovalRequestForApprover(int id)
+        public ActionResult<IEnumerable<ClaimApprovalStatusTrackerDTO>> ApprovalsPendingForApprover(int id)
         {
 
 

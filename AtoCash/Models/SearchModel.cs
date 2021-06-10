@@ -34,6 +34,7 @@ namespace AtoCash.Models
 
     public class AccountsPayableSearchModel
     {
+
         public bool? IsAccountSettled { get; set; }
         public DateTime? SettledAccountsFrom { get; set; }
         public DateTime? SettledAccountsTo { get; set; }
@@ -44,11 +45,15 @@ namespace AtoCash.Models
     public class ExpenseSubClaimsSearchModel
     {
         public int? ExpenseTypeId { get; set; }
+
+        public int? EmpId { get; set; }
         public double? ExpenseReimbClaimAmountFrom { get; set; }
         public double? ExpenseReimbClaimAmountTo { get; set; }
         public DateTime? RequestRaisedDateFrom { get; set; }
         public DateTime? RequestRaisedDateTo { get; set; }
         public int? ApprovalStatusTypeId { get; set; }
+
+        public int? CostCenterId { get; set; }
 
     }
 

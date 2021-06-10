@@ -27,13 +27,18 @@ namespace AtoCash.Models
         public int ExpenseTypeId { get; set; }
 
         [Required]
+        [ForeignKey("EmployeeId")]
+        public virtual Employee Employee { get; set; }
+        public int EmployeeId { get; set; }
+
+        [Required]
         public Double ExpenseReimbClaimAmount { get; set; }
 
         public string DocumentIDs { get; set; }
 
 
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public string InvoiceNo { get; set; }
 
         [Required]
@@ -47,16 +52,37 @@ namespace AtoCash.Models
         public DateTime InvoiceDate { get; set; }  
         
         [Required]
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public string Vendor { get; set; } 
         
         [Required]
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "varchar(20)")]
         public string Location { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string Description { get; set; }
+
+        [ForeignKey("DepartmentId")]
+        public virtual Department Department { get; set; }
+        public int? DepartmentId { get; set; }
+
+        [ForeignKey("ProjectId")]
+        public virtual Project Project { get; set; }
+        public int? ProjectId { get; set; }
+
+        [ForeignKey("SubProjectId")]
+        public virtual SubProject SubProject { get; set; }
+        public int? SubProjectId { get; set; }
+
+        [ForeignKey("WorkTaskId")]
+        public virtual WorkTask WorkTask { get; set; }
+        public int? WorkTaskId { get; set; }
+
+        [Required]
+        [ForeignKey("CostCenterId")]
+        public virtual CostCenter CostCenter { get; set; }
+        public int CostCenterId { get; set; }
 
     }
 
@@ -95,18 +121,19 @@ namespace AtoCash.Models
         public int ExpenseTypeId { get; set; }
         public string ExpenseType { get; set; }
 
-        public string Department{ get; set; }
+        public string DepartmentName { get; set; }
         public int? DepartmentId { get; set; }
-        public string Project{ get; set; }
+        public string ProjectName { get; set; }
         public int? ProjectId { get; set; }
 
-        public string SubProject{ get; set; }
+        public string SubProjectName  { get; set; }
         public int? SubProjectId { get; set; }
 
-        public string WorkTask{ get; set; }
+        public string WorkTaskName  { get; set; }
         public int? WorkTaskId { get; set; }
 
-
+        public int? CostCenterId { get; set; }
+        public string CostCenter { get; set; }
         public string ApprovalStatusType { get; set; }
         public int ApprovalStatusTypeId { get; set; }
 

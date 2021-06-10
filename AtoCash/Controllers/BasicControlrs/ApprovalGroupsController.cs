@@ -37,7 +37,7 @@ namespace AtoCash.Controllers
                 ApprovalGroupVM approvalGroupVM = new()
                 {
                     Id = approvalGroup.Id,
-                    ApprovalGroupCode = approvalGroup.ApprovalGroupCode + "-" + approvalGroup.ApprovalGroupDesc
+                    ApprovalGroupCode = approvalGroup.ApprovalGroupCode + ":" + approvalGroup.ApprovalGroupDesc
                 };
 
                 ListApprovalGroupVM.Add(approvalGroupVM);

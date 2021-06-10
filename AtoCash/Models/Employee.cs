@@ -16,36 +16,36 @@ namespace AtoCash.Models
         public int Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(200)")]
+        [Column(TypeName = "varchar(200)")]
         public string FirstName { get; set; }
 
-        [Column(TypeName = "nvarchar(100)")]
+        [Column(TypeName = "varchar(100)")]
         public string MiddleName { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(100)")]
+        [Column(TypeName = "varchar(100)")]
         public string LastName { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(30)")]
+        [Column(TypeName = "varchar(30)")]
         public string EmpCode { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(30)")]
+        [Column(TypeName = "varchar(30)")]
         public string BankAccount { get; set; }
 
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public string BankCardNo { get; set; }
 
         public string NationalID { get; set; }
 
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "varchar(20)")]
         public string PassportNo { get; set; }
 
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "varchar(20)")]
         public string TaxNumber { get; set; }
 
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "varchar(50)")]
         public string Nationality { get; set; }
 
         [Required]
@@ -61,7 +61,7 @@ namespace AtoCash.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "varchar(20)")]
         public string MobileNumber { get; set; }
 
         //Navigation Properties

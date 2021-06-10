@@ -36,7 +36,7 @@ namespace AtoCash.Controllers
                 SubProjectVM subProjectVM = new()
                 {
                     Id = subProject.Id,
-                    SubProjectName = subProject.SubProjectName + "-" + subProject.SubProjectDesc
+                    SubProjectName = subProject.SubProjectName + ":" + subProject.SubProjectDesc
                 };
 
                 ListSubProjectVM.Add(subProjectVM);

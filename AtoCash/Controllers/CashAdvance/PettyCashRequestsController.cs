@@ -79,6 +79,8 @@ namespace AtoCash.Controllers
 
             var pettyCashRequest = await _context.PettyCashRequests.FindAsync(id);
 
+            var disbAndClaim = _context.DisbursementsAndClaimsMasters.Where(d => d.PettyCashRequestId == id).FirstOrDefault();
+
             if (pettyCashRequest == null)
             {
                 return Conflict(new RespStatus { Status = "Failure", Message = "GetPettyCashRequest Id is Invalid!" });
@@ -102,6 +104,9 @@ namespace AtoCash.Controllers
             pettyCashRequestDTO.ApprovalStatusTypeId = pettyCashRequest.ApprovalStatusTypeId;
             pettyCashRequestDTO.ApprovalStatusType = _context.ApprovalStatusTypes.Find(pettyCashRequest.ApprovalStatusTypeId).Status;
             pettyCashRequestDTO.ApprovedDate = pettyCashRequest.ApprovedDate;
+
+            pettyCashRequestDTO.CreditToBank = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToCredit : 0;
+            pettyCashRequestDTO.IsSettled = !(disbAndClaim.IsSettledAmountCredited ?? false);
 
             pettyCashRequestDTO.Comments = pettyCashRequest.Comments;
 
@@ -490,7 +495,7 @@ namespace AtoCash.Controllers
 
             //### 1. If Employee Eligible for Cash Claim enter a record and reduce the available amount for next claim
             #region
-            int costCenter = _context.Projects.Find(pettyCashRequestDto.ProjectId).CostCenterId;
+            int costCenterId = _context.Projects.Find(pettyCashRequestDto.ProjectId).CostCenterId;
 
             int projManagerid = _context.Projects.Find(pettyCashRequestDto.ProjectId).ProjectManagerId;
 
@@ -512,7 +517,6 @@ namespace AtoCash.Controllers
             curPettyCashBal.EmployeeId = empid;
             curPettyCashBal.UpdatedOn = DateTime.Now;
             _context.Update(curPettyCashBal);
-            await _context.SaveChangesAsync();
             #endregion
 
             //##### 2. Adding entry to PettyCashRequest table for record
@@ -632,7 +636,6 @@ namespace AtoCash.Controllers
             disbursementsAndClaimsMaster.PettyCashRequestId = pettyCashRequestDto.Id;
             disbursementsAndClaimsMaster.ExpenseReimburseReqId = null;
             disbursementsAndClaimsMaster.RequestTypeId = (int)ERequestType.CashAdvance;
-            disbursementsAndClaimsMaster.DepartmentId = null;
             disbursementsAndClaimsMaster.ProjectId = pettyCashRequestDto.ProjectId;
             disbursementsAndClaimsMaster.SubProjectId = pettyCashRequestDto.SubProjectId;
             disbursementsAndClaimsMaster.WorkTaskId = pettyCashRequestDto.WorkTaskId;
@@ -691,7 +694,6 @@ namespace AtoCash.Controllers
             curPettyCashBal.EmployeeId = reqEmpid;
             curPettyCashBal.UpdatedOn = DateTime.Now;
             _context.Update(curPettyCashBal);
-            await _context.SaveChangesAsync();
 
             #endregion
 
@@ -713,6 +715,8 @@ namespace AtoCash.Controllers
 
             };
             _context.PettyCashRequests.Add(pcrq);
+
+
             await _context.SaveChangesAsync();
 
             //get the saved record Id
@@ -791,6 +795,7 @@ namespace AtoCash.Controllers
                         EmployeeId = pettyCashRequestDto.EmployeeId,
                         PettyCashRequestId = pettyCashRequestDto.Id,
                         DepartmentId = reqEmp.DepartmentId, //fix this
+                        ProjManagerId = null,
                         ProjectId = null,
                         SubProjectId = null,
                         WorkTaskId = null,
@@ -806,7 +811,14 @@ namespace AtoCash.Controllers
 
 
                     _context.ClaimApprovalStatusTrackers.Add(claimAppStatusTrack);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
 
 
                     if (isFirstApprover)

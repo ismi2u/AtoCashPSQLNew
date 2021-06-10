@@ -26,9 +26,24 @@ namespace AtoCash.Controllers
 
         // GET: api/EmploymentTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmploymentType>>> GetEmploymentTypes()
+        public async Task<ActionResult<IEnumerable<EmploymentTypeDTO>>> GetEmploymentTypes()
         {
-            return await _context.EmploymentTypes.ToListAsync();
+            var EmplmntTypes = await _context.EmploymentTypes.ToListAsync();
+
+            List<EmploymentTypeDTO> ListEmploymentTypeDTO = new();
+
+            foreach ( EmploymentType emplmttype in EmplmntTypes)
+            {
+                EmploymentTypeDTO employmentTypeDTO = new();
+
+                employmentTypeDTO.Id = emplmttype.Id;
+                employmentTypeDTO.EmpJobTypeCode = emplmttype.EmpJobTypeCode + ":" + emplmttype.EmpJobTypeDesc;
+
+                ListEmploymentTypeDTO.Add(employmentTypeDTO);
+            }
+
+
+            return Ok(ListEmploymentTypeDTO);
         }
 
         // GET: api/EmploymentTypes/5

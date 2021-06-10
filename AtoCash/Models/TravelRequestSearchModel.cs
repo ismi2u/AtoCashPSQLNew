@@ -20,14 +20,14 @@ namespace AtoCash.Models
         public string TravelPurpose { get; set; }
 
         public int? DepartmentId { get; set; }
-        public string Department { get; set; }
+        public string DepartmentName { get; set; }
         public int? ProjectId { get; set; }
-        public string Project { get; set; }
+        public string ProjectName { get; set; }
 
-        public string SubProject { get; set; }
+        public string SubProjectName { get; set; }
         public int? SubProjectId { get; set; }
 
-        public string WorkTask { get; set; }
+        public string WorkTaskName { get; set; }
         public int? WorkTaskId { get; set; }
         public DateTime? ReqRaisedDate { get; set; }
   

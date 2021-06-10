@@ -15,7 +15,7 @@ namespace AtoCash.Models
         public int Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(25)")]
+        [Column(TypeName = "varchar(25)")]
         public string ProjectName { get; set; }
 
         [Required]
@@ -29,7 +29,7 @@ namespace AtoCash.Models
         public int ProjectManagerId { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(200)")]
+        [Column(TypeName = "varchar(200)")]
         public string ProjectDesc{ get; set; }
 
 

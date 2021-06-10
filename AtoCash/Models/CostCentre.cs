@@ -14,11 +14,11 @@ namespace AtoCash.Models
         public int Id { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "varchar(20)")]
         public string CostCenterCode { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(150)")]
+        [Column(TypeName = "varchar(150)")]
         public string CostCenterDesc{ get; set; }
 
         [Required]

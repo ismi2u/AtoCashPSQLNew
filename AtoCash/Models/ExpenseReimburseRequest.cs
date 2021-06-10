@@ -17,7 +17,7 @@ namespace AtoCash.Models
 
 
         [Required]
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string ExpenseReportTitle { get; set; }
 
         [Required]
@@ -52,6 +52,10 @@ namespace AtoCash.Models
         public virtual WorkTask WorkTask { get; set; }
         public int? WorkTaskId { get; set; }
 
+        [ForeignKey("CostCenterId")]
+        public virtual CostCenter CostCenter { get; set; }
+        public int? CostCenterId { get; set; }
+
         [Required]
         [ForeignKey("ApprovalStatusTypeId")]
         public virtual ApprovalStatusType ApprovalStatusType { get; set; }
@@ -60,7 +64,7 @@ namespace AtoCash.Models
         public DateTime? ApprovedDate { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(250)")]
+        [Column(TypeName = "varchar(250)")]
         public string Comments { get; set; }
     }
 
@@ -94,6 +98,11 @@ namespace AtoCash.Models
         public bool ShowEditDelete { get; set; }
         public List<ExpenseSubClaimDTO> ExpenseSubClaims { get; set; }
 
+        public double? CreditToWallet { get; set; }
+
+        public double? CreditToBank { get; set; }
+
+        public bool IsSettled { get; set; }
 
         public string Comments { get; set; }
 

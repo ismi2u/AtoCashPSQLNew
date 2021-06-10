@@ -37,7 +37,7 @@ namespace AtoCash.Controllers
                 WorkTaskVM workTaskVM = new()
                 {
                     Id = workTask.Id,
-                    TaskName = workTask.TaskName + "-" + workTask.TaskDesc
+                    TaskName = workTask.TaskName + ":" + workTask.TaskDesc
                 };
 
                 ListWorkTaskVM.Add(workTaskVM);

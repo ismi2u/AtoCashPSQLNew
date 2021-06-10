@@ -47,6 +47,9 @@ namespace AtoCash.Controllers
             List<ExpenseReimburseRequestDTO> ListExpenseReimburseRequestDTO = new();
             foreach (ExpenseReimburseRequest expenseReimbRequest in expenseReimburseRequests)
             {
+
+                var disbAndClaim = _context.DisbursementsAndClaimsMasters.Where(d => d.ExpenseReimburseReqId == expenseReimbRequest.Id).FirstOrDefault();
+
                 ExpenseReimburseRequestDTO expenseReimburseRequestDTO = new()
                 {
                     Id = expenseReimbRequest.Id,
@@ -72,6 +75,11 @@ namespace AtoCash.Controllers
                     ApprovedDate = expenseReimbRequest.ApprovedDate,
                     ApprovalStatusTypeId = expenseReimbRequest.ApprovalStatusTypeId,
                     ApprovalStatusType = _context.ApprovalStatusTypes.Find(expenseReimbRequest.ApprovalStatusTypeId).Status,
+
+
+                    CreditToBank = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToCredit : 0,
+                    CreditToWallet = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToWallet : 0,
+                    IsSettled = !(disbAndClaim.IsSettledAmountCredited ?? false)
                 };
                 ListExpenseReimburseRequestDTO.Add(expenseReimburseRequestDTO);
 
@@ -92,6 +100,8 @@ namespace AtoCash.Controllers
             {
                 return Conflict(new RespStatus { Status = "Failure", Message = "Expense Reimburse Id invalid!" });
             }
+
+            var disbAndClaim = _context.DisbursementsAndClaimsMasters.Where(d => d.ExpenseReimburseReqId == id).FirstOrDefault();
 
             ExpenseReimburseRequestDTO expenseReimburseRequestDTO = new()
             {
@@ -119,7 +129,12 @@ namespace AtoCash.Controllers
                 ApprovalStatusTypeId = expenseReimbRequest.ApprovalStatusTypeId,
                 ApprovalStatusType = _context.ApprovalStatusTypes.Find(expenseReimbRequest.ApprovalStatusTypeId).Status,
 
-                Comments = expenseReimbRequest.Comments
+                Comments = expenseReimbRequest.Comments,
+
+                CreditToBank = disbAndClaim.IsSettledAmountCredited?? false ? disbAndClaim.AmountToCredit: 0,
+                CreditToWallet = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToWallet : 0,
+                IsSettled = !(disbAndClaim.IsSettledAmountCredited ?? false)
+
             };
             return expenseReimburseRequestDTO;
         }
@@ -492,6 +507,7 @@ namespace AtoCash.Controllers
             Employee reqEmp = _context.Employees.Find(reqEmpid);
             int reqApprGroupId = reqEmp.ApprovalGroupId;
             int reqRoleId = reqEmp.RoleId;
+            int costCenterId = _context.Departments.Find(reqEmp.DepartmentId ).CostCenterId;
 
             var approRolMapsList = _context.ApprovalRoleMaps.Include("ApprovalLevel").Where(a => a.ApprovalGroupId == reqApprGroupId).ToList();
             int maxApprLevel = approRolMapsList.Select(x => x.ApprovalLevel).Max(a => a.Level);
@@ -510,6 +526,7 @@ namespace AtoCash.Controllers
             expenseReimburseRequest.TotalClaimAmount = dblTotalClaimAmount; //Currently Zero but added as per the request
             expenseReimburseRequest.ExpReimReqDate = DateTime.Now;
             expenseReimburseRequest.DepartmentId = reqEmp.DepartmentId;
+            expenseReimburseRequest.CostCenterId = costCenterId;
             expenseReimburseRequest.ProjectId = null;
             expenseReimburseRequest.SubProjectId = null;
             expenseReimburseRequest.WorkTaskId = null;
@@ -528,6 +545,7 @@ namespace AtoCash.Controllers
                 //get expensereimburserequestId from the saved record and then use here for sub-claims
                 expenseSubClaim.ExpenseReimburseRequestId = expenseReimburseRequest.Id;
                 expenseSubClaim.ExpenseTypeId = expenseSubClaimDto.ExpenseTypeId;
+                expenseSubClaim.EmployeeId = reqEmpid;
                 expenseSubClaim.ExpenseReimbClaimAmount = expenseSubClaimDto.ExpenseReimbClaimAmount;
                 expenseSubClaim.DocumentIDs = expenseSubClaimDto.DocumentIDs;
                 expenseSubClaim.InvoiceNo = expenseSubClaimDto.InvoiceNo;
@@ -536,6 +554,11 @@ namespace AtoCash.Controllers
                 expenseSubClaim.TaxAmount = expenseSubClaimDto.TaxAmount;
                 expenseSubClaim.Vendor = expenseSubClaimDto.Vendor;
                 expenseSubClaim.Location = expenseSubClaimDto.Location;
+                expenseSubClaim.DepartmentId = reqEmp.DepartmentId;
+                expenseSubClaim.ProjectId = null;
+                expenseSubClaim.SubProjectId = null;
+                expenseSubClaim.WorkTaskId = null;
+                expenseSubClaim.CostCenterId = costCenterId;
                 expenseSubClaim.Description = expenseSubClaimDto.Description;
 
                 _context.ExpenseSubClaims.Add(expenseSubClaim);
@@ -778,6 +801,11 @@ namespace AtoCash.Controllers
                 expenseSubClaim.Tax = expenseSubClaimDto.Tax;
                 expenseSubClaim.TaxAmount = expenseSubClaimDto.TaxAmount;
                 expenseSubClaim.Vendor = expenseSubClaimDto.Vendor;
+                expenseSubClaim.DepartmentId = null;
+                expenseSubClaim.ProjectId = expenseReimburseRequestDto.ProjectId;
+                expenseSubClaim.SubProjectId = expenseReimburseRequestDto.SubProjectId;
+                expenseSubClaim.WorkTaskId = expenseReimburseRequestDto.WorkTaskId;
+                expenseSubClaim.CostCenterId = costCenterId;
                 expenseSubClaim.Location = expenseSubClaimDto.Location;
                 expenseSubClaim.Description = expenseSubClaimDto.Description;
 

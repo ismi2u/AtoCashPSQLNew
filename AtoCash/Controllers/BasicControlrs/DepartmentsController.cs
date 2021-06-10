@@ -37,7 +37,7 @@ namespace AtoCash.Controllers
                 DepartmentVM departmentVM = new DepartmentVM
                 {
                     Id = department.Id,
-                    DeptDesc = department.DeptCode + "-" + department.DeptName
+                    DeptDesc = department.DeptCode + ":" + department.DeptName
                 };
 
                 ListDepartmentVM.Add(departmentVM);
@@ -57,7 +57,7 @@ namespace AtoCash.Controllers
                 DepartmentVM departmentVM = new DepartmentVM
                 {
                     Id = department.Id,
-                    DeptDesc = department.DeptCode + "-" + department.DeptName
+                    DeptDesc = department.DeptCode + ":" + department.DeptName
                 };
 
                 ListDepartmentVM.Add(departmentVM);

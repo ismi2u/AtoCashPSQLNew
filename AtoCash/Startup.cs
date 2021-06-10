@@ -49,7 +49,8 @@ namespace AtoCash
             //      "PostgreSQLInLocalAppInContainer": "Server=host.docker.internal;Port=5432;Database=AtoCashDB;User Id=postgres;Password=Pa55word2019!123;Pooling=true;",
 
             //  "WithinContainerPostGreSQL": "Server=postgresdata;Port=5432;Database=AtoCashDB;User Id=postgres;Password=Pa55word2019!123;Pooling=true;",
-            //  "PSQLCloudServer": "Server=128.199.24.248;Port=5432;Database=AtoCashDB;User Id=postgres;Password=Pa55word2019!123;Pooling=true;",
+            //  "PSQLCloudServer": "Server=167.71.232.170;Port=5432;Database=AtoCashDB;User Id=postgres;Password=Pa55word2019!123;Pooling=true;",
+            //GooglePSQLCloudServer": "Server = 34.93.31.185; Port = 5432; Database = AtoCashDB; User Id = postgres; Password = Pa55word2019!123; Pooling = true; ",
 
             services.AddDbContextPool<AtoCashDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("WithinContainerPostGreSQL")));
 
