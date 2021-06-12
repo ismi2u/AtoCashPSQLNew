@@ -141,8 +141,8 @@ namespace AtoCash.Controllers
                     new DataColumn("UserFullName", typeof(string)),
                     new DataColumn("Email",typeof(string)),
                     new DataColumn("EmpCode",typeof(string)),
-                    new DataColumn("DOB",typeof(DateTime)),
-                    new DataColumn("DOJ", typeof(DateTime)),
+                    new DataColumn("DOB",typeof(string)),
+                    new DataColumn("DOJ", typeof(string)),
                     new DataColumn("Gender",typeof(string)),
                     new DataColumn("MobileNumber",typeof(string)),
                     new DataColumn("Department",typeof(string)),
@@ -358,8 +358,8 @@ namespace AtoCash.Controllers
                     new DataColumn("PassportNo",typeof(string)),
                     new DataColumn("TaxNumber",typeof(string)),
                     new DataColumn("Nationality",typeof(string)),
-                    new DataColumn("DOB",typeof(DateTime)),
-                    new DataColumn("DOJ", typeof(DateTime)),
+                    new DataColumn("DOB",typeof(string)),
+                    new DataColumn("DOJ", typeof(string)),
                     new DataColumn("Gender",typeof(string)),
                     new DataColumn("Email",typeof(string)),
                     new DataColumn("MobileNumber",typeof(string)),
@@ -582,9 +582,9 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.CostCenter = disb.CostCenterId != 0 ? _context.CostCenters.Find(disb.CostCenterId).CostCenterCode : null;
                         disbursementsAndClaimsMasterDTO.ApprovalStatusId = disb.ApprovalStatusId;
                         disbursementsAndClaimsMasterDTO.ApprovalStatusType = disb.ApprovalStatusId != 0 ? _context.ApprovalStatusTypes.Find(disb.ApprovalStatusId).Status : null;
-                        disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate;
+                        disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate.ToShortDateString();
                         disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disb.IsSettledAmountCredited ?? false;
-                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate;
+                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ?  disb.SettledDate.Value.ToShortDateString() : string.Empty;
                         disbursementsAndClaimsMasterDTO.SettlementComment = disb.SettlementComment;
 
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
@@ -707,9 +707,9 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.CostCenter = disb.CostCenterId != 0 ? _context.CostCenters.Find(disb.CostCenterId).CostCenterCode : null;
                         disbursementsAndClaimsMasterDTO.ApprovalStatusId = disb.ApprovalStatusId;
                         disbursementsAndClaimsMasterDTO.ApprovalStatusType = disb.ApprovalStatusId != 0 ? _context.ApprovalStatusTypes.Find(disb.ApprovalStatusId).Status : null;
-                        disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate;
+                        disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate.ToShortDateString();
                         disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disb.IsSettledAmountCredited ?? false;
-                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate;
+                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ?  disb.SettledDate.Value.ToShortDateString() : string.Empty;
                         disbursementsAndClaimsMasterDTO.SettlementComment = disb.SettlementComment;
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
                         disbursementsAndClaimsMasterDTO.SettlementBankCard = disb.SettlementBankCard;
@@ -743,7 +743,7 @@ namespace AtoCash.Controllers
                     new DataColumn("Project",typeof(string)),
                     new DataColumn("SubProject", typeof(string)),
                     new DataColumn("WorkTask",typeof(string)),
-                    new DataColumn("RecordDate",typeof(DateTime)),
+                    new DataColumn("RecordDate",typeof(string)),
                     new DataColumn("CurrencyType",typeof(string)),
                     new DataColumn("ClaimAmount", typeof(Double)),
                     new DataColumn("AmountToWallet", typeof(Double)),
@@ -751,7 +751,7 @@ namespace AtoCash.Controllers
                     new DataColumn("CostCenter", typeof(string)),
                     new DataColumn("ApprovalStatus", typeof(string)),
                     new DataColumn("IsSettledAmountCredited", typeof(bool)),
-                    new DataColumn("SettledDate", typeof(DateTime)),
+                    new DataColumn("SettledDate", typeof(string)),
                     new DataColumn("SettlementComment", typeof(string)),
                     new DataColumn("SettlementAccount", typeof(string)),
                     new DataColumn("SettlementBankCard", typeof(string)),
@@ -791,7 +791,7 @@ namespace AtoCash.Controllers
                 // Add the datatable to the Excel workbook
 
                 List<string> docUrls = new();
-                var docUrl = GetExcel("CashReimburseReportByEmployee", dt);
+                var docUrl = GetExcel("CashRequestAndClaimsReport", dt);
 
                 docUrls.Add(docUrl);
 
@@ -962,6 +962,9 @@ namespace AtoCash.Controllers
                     travelItemDTO.EmployeeId = travel.EmployeeId;
                     travelItemDTO.EmployeeName = _context.Employees.Find(travel.EmployeeId).GetFullName();
 
+                    travelItemDTO.TravelStartDate = travel.TravelStartDate;
+                    travelItemDTO.TravelEndDate = travel.TravelEndDate;
+                    travelItemDTO.TravelPurpose = travel.TravelPurpose;
                     travelItemDTO.DepartmentId = travel.DepartmentId;
                     travelItemDTO.DepartmentName = travel.DepartmentId != null ? _context.Departments.Find(travel.DepartmentId).DeptName : null;
                     travelItemDTO.ProjectId = travel.ProjectId;
@@ -993,7 +996,7 @@ namespace AtoCash.Controllers
                     new DataColumn("Project",typeof(string)),
                     new DataColumn("SubProject", typeof(string)),
                     new DataColumn("WorkTask",typeof(string)),
-                    new DataColumn("ReqRaisedDate",typeof(DateTime)),
+                    new DataColumn("ReqRaisedDate",typeof(string)),
                     new DataColumn("CostCenter", typeof(string)),
                     new DataColumn("ApprovalStatus", typeof(string))
                 });
@@ -1004,14 +1007,14 @@ namespace AtoCash.Controllers
                     (
                     travelItem.Id,
                     travelItem.EmployeeName,
-                    travelItem.TravelStartDate,
-                    travelItem.TravelEndDate,
+                    travelItem.TravelStartDate.ToShortDateString(),
+                    travelItem.TravelEndDate.ToShortDateString(),
                     travelItem.TravelPurpose,
                     travelItem.DepartmentName,
                     travelItem.ProjectName,
                     travelItem.SubProjectName,
                     travelItem.WorkTaskName,
-                    travelItem.ReqRaisedDate,
+                    travelItem.ReqRaisedDate.ToShortDateString(),
                     travelItem.CostCenter,
                     travelItem.ApprovalStatusType
                     );
@@ -1051,9 +1054,9 @@ namespace AtoCash.Controllers
             predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
             if (searchModel.SettledAccountsFrom.HasValue)
-                predicate = predicate.And(x => x.SettledDate >= searchModel.SettledAccountsFrom);
+                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
-                predicate = predicate.And(x => x.SettledDate <= searchModel.SettledAccountsTo);
+                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
 
             if (predicate.IsStarted)
             {
@@ -1073,6 +1076,7 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.EmployeeId = disbursementsAndClaimsMaster.EmployeeId;
                 disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
                 disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
+                disbursementsAndClaimsMasterDTO.PettyCashRequestId = disbursementsAndClaimsMaster.PettyCashRequestId;
                 disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
                 disbursementsAndClaimsMasterDTO.DepartmentName = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
                 disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
@@ -1083,12 +1087,12 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.WorkTaskName = disbursementsAndClaimsMaster.WorkTaskId != null ? _context.WorkTasks.Find(disbursementsAndClaimsMaster.WorkTaskId).TaskName : string.Empty;
                 disbursementsAndClaimsMasterDTO.CurrencyTypeId = disbursementsAndClaimsMaster.CurrencyTypeId;
                 disbursementsAndClaimsMasterDTO.CurrencyType = _context.CurrencyTypes.Find(disbursementsAndClaimsMaster.CurrencyTypeId).CurrencyCode;
-                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate;
+                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate.ToShortDateString();
                 disbursementsAndClaimsMasterDTO.ClaimAmount = disbursementsAndClaimsMaster.ClaimAmount;
                 disbursementsAndClaimsMasterDTO.AmountToWallet = disbursementsAndClaimsMaster.AmountToWallet;
                 disbursementsAndClaimsMasterDTO.AmountToCredit = disbursementsAndClaimsMaster.AmountToCredit;
                 disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disbursementsAndClaimsMaster.IsSettledAmountCredited ?? false;
-                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate;
+                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate!= null ? disbursementsAndClaimsMaster.SettledDate.Value.ToShortDateString() : string.Empty;
                 disbursementsAndClaimsMasterDTO.SettlementComment = disbursementsAndClaimsMaster.SettlementComment;
                 disbursementsAndClaimsMasterDTO.SettlementAccount = disbursementsAndClaimsMaster.SettlementAccount;
                 disbursementsAndClaimsMasterDTO.SettlementBankCard = disbursementsAndClaimsMaster.SettlementBankCard;
@@ -1102,7 +1106,7 @@ namespace AtoCash.Controllers
 
             }
 
-            return Ok(ListDisbursementsAndClaimsMasterDTO.OrderByDescending(x=> x.SettledDate).ToList());
+            return Ok(ListDisbursementsAndClaimsMasterDTO.OrderByDescending(x => x.SettledDate).ToList());
         }
 
         // GET: api/DisbursementsAndClaimsMasters
@@ -1124,10 +1128,11 @@ namespace AtoCash.Controllers
                 predicate = predicate.And(x => x.IsSettledAmountCredited == searchModel.IsAccountSettled);
             }
 
+
             if (searchModel.SettledAccountsFrom.HasValue)
-                predicate = predicate.And(x => x.SettledDate >= searchModel.SettledAccountsFrom);
+                predicate = predicate.And(x => x.RecordDate >= searchModel.SettledAccountsFrom);
             if (searchModel.SettledAccountsTo.HasValue)
-                predicate = predicate.And(x => x.SettledDate <= searchModel.SettledAccountsTo);
+                predicate = predicate.And(x => x.RecordDate <= searchModel.SettledAccountsTo);
 
             predicate = predicate.And(x => x.ApprovalStatusId == (int)EApprovalStatus.Approved);
 
@@ -1149,6 +1154,7 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.EmployeeId = disbursementsAndClaimsMaster.EmployeeId;
                 disbursementsAndClaimsMasterDTO.EmployeeName = _context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).GetFullName();
                 disbursementsAndClaimsMasterDTO.ExpenseReimburseReqId = disbursementsAndClaimsMaster.ExpenseReimburseReqId;
+                disbursementsAndClaimsMasterDTO.PettyCashRequestId = disbursementsAndClaimsMaster.PettyCashRequestId;
                 disbursementsAndClaimsMasterDTO.DepartmentId = disbursementsAndClaimsMaster.DepartmentId;
                 disbursementsAndClaimsMasterDTO.DepartmentName = disbursementsAndClaimsMaster.DepartmentId != null ? _context.Departments.Find(disbursementsAndClaimsMaster.DepartmentId).DeptName : string.Empty;
                 disbursementsAndClaimsMasterDTO.ProjectId = disbursementsAndClaimsMaster.ProjectId;
@@ -1159,12 +1165,12 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.WorkTaskName = disbursementsAndClaimsMaster.WorkTaskId != null ? _context.WorkTasks.Find(disbursementsAndClaimsMaster.WorkTaskId).TaskName : string.Empty;
                 disbursementsAndClaimsMasterDTO.CurrencyTypeId = disbursementsAndClaimsMaster.CurrencyTypeId;
                 disbursementsAndClaimsMasterDTO.CurrencyType = _context.CurrencyTypes.Find(disbursementsAndClaimsMaster.CurrencyTypeId).CurrencyCode;
-                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate;
+                disbursementsAndClaimsMasterDTO.RecordDate = disbursementsAndClaimsMaster.RecordDate.ToShortDateString();
                 disbursementsAndClaimsMasterDTO.ClaimAmount = disbursementsAndClaimsMaster.ClaimAmount;
                 disbursementsAndClaimsMasterDTO.AmountToWallet = disbursementsAndClaimsMaster.AmountToWallet;
                 disbursementsAndClaimsMasterDTO.AmountToCredit = disbursementsAndClaimsMaster.AmountToCredit;
                 disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disbursementsAndClaimsMaster.IsSettledAmountCredited ?? false;
-                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate;
+                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate != null ? disbursementsAndClaimsMaster.SettledDate.Value.ToShortDateString() : string.Empty;
                 disbursementsAndClaimsMasterDTO.SettlementComment = disbursementsAndClaimsMaster.SettlementComment;
                 disbursementsAndClaimsMasterDTO.SettlementAccount = disbursementsAndClaimsMaster.SettlementAccount;
                 disbursementsAndClaimsMasterDTO.SettlementBankCard = disbursementsAndClaimsMaster.SettlementBankCard;
@@ -1180,9 +1186,9 @@ namespace AtoCash.Controllers
 
 
             DataTable dt = new();
-            dt.Columns.AddRange(new DataColumn[21]
+            dt.Columns.AddRange(new DataColumn[22]
                 {
-                    //new DataColumn("Id", typeof(int)),
+                    new DataColumn("Id", typeof(int)),
                     new DataColumn("EmployeeName", typeof(string)),
                     new DataColumn("PettyCashRequestId", typeof(int)),
                     new DataColumn("ExpenseReimburseReqId", typeof(int)),
@@ -1191,7 +1197,7 @@ namespace AtoCash.Controllers
                     new DataColumn("Project",typeof(string)),
                     new DataColumn("SubProject", typeof(string)),
                     new DataColumn("WorkTask",typeof(string)),
-                    new DataColumn("RecordDate",typeof(DateTime)),
+                    new DataColumn("RecordDate",typeof(string)),
                     new DataColumn("CurrencyType",typeof(string)),
                     new DataColumn("ClaimAmount", typeof(Double)),
                     new DataColumn("AmountToWallet", typeof(Double)),
@@ -1199,7 +1205,7 @@ namespace AtoCash.Controllers
                     new DataColumn("CostCenter", typeof(string)),
                     new DataColumn("ApprovalStatus", typeof(string)),
                     new DataColumn("IsSettledAmountCredited", typeof(bool)),
-                    new DataColumn("SettledDate", typeof(DateTime)),
+                    new DataColumn("SettledDate", typeof(string)),
                     new DataColumn("SettlementComment", typeof(string)),
                     new DataColumn("SettlementAccount", typeof(string)),
                     new DataColumn("SettlementBankCard", typeof(string)),
@@ -1210,6 +1216,7 @@ namespace AtoCash.Controllers
             foreach (var disbItem in ListDisbursementsAndClaimsMasterDTO)
             {
                 dt.Rows.Add(
+                     disbItem.Id,
                     disbItem.EmployeeName,
                     disbItem.PettyCashRequestId,
                     disbItem.ExpenseReimburseReqId,
@@ -1258,11 +1265,9 @@ namespace AtoCash.Controllers
             var predicate = PredicateBuilder.New<ExpenseSubClaim>();
 
             if (searchModel.ExpenseTypeId != null && searchModel.ExpenseTypeId != 0)
-                predicate = predicate.And(x => x.ExpenseTypeId  != searchModel.ExpenseTypeId);
+                predicate = predicate.And(x => x.ExpenseTypeId != searchModel.ExpenseTypeId);
             if (searchModel.EmpId != null && searchModel.EmpId != 0)
                 predicate = predicate.And(x => x.EmployeeId != searchModel.EmpId);
-            if (searchModel.ExpenseTypeId != null && searchModel.CostCenterId != 0 )
-                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
             if (searchModel.ExpenseReimbClaimAmountFrom > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
             if (searchModel.ExpenseReimbClaimAmountTo > 0)
@@ -1314,7 +1319,7 @@ namespace AtoCash.Controllers
 
                 expenseSubClaimDTO.ProjectId = expenseSubClaim.ProjectId;
                 expenseSubClaimDTO.ProjectName = expenseSubClaim.ProjectId != null ? _context.Projects.Find(expenseSubClaim.ProjectId).ProjectName : string.Empty;
-                
+
                 expenseSubClaimDTO.CostCenterId = expenseSubClaim.CostCenterId;
                 expenseSubClaimDTO.CostCenter = _context.CostCenters.Find(expenseSubClaim.CostCenterId).CostCenterCode;
 
@@ -1347,8 +1352,6 @@ namespace AtoCash.Controllers
                 predicate = predicate.And(x => x.ExpenseTypeId != searchModel.ExpenseTypeId);
             if (searchModel.EmpId != null && searchModel.EmpId != 0)
                 predicate = predicate.And(x => x.EmployeeId != searchModel.EmpId);
-            if (searchModel.ExpenseTypeId != null && searchModel.CostCenterId != 0)
-                predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
             if (searchModel.ExpenseReimbClaimAmountFrom > 0)
                 predicate = predicate.And(x => x.ExpenseReimbClaimAmount >= searchModel.ExpenseReimbClaimAmountFrom);
             if (searchModel.ExpenseReimbClaimAmountTo > 0)
@@ -1422,9 +1425,9 @@ namespace AtoCash.Controllers
                     new DataColumn("ExpenseReimburseId", typeof(int)),
                     new DataColumn("ExpenseSubClaimId", typeof(int)),
                     new DataColumn("EmployeeName", typeof(string)),
-                    new DataColumn("ExpReimReqDate",typeof(DateTime)),
+                    new DataColumn("ExpReimReqDate",typeof(string)),
                     new DataColumn("InvoiceNo",typeof(string)),
-                    new DataColumn("InvoiceDate",typeof(DateTime)),
+                    new DataColumn("InvoiceDate",typeof(string)),
                     new DataColumn("Tax",typeof(float)),
                     new DataColumn("TaxAmount",typeof(Double)),
                     new DataColumn("ExpSubClaimAmount",typeof(Double)),
@@ -1478,7 +1481,6 @@ namespace AtoCash.Controllers
 
 
 
-
         private string GetExcel(string reporttype, DataTable dt)
         {
             // Creating the Excel workbook 
@@ -1514,3 +1516,4 @@ namespace AtoCash.Controllers
         ///End of methods
     }
 }
+

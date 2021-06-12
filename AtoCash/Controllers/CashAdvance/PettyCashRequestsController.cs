@@ -517,6 +517,8 @@ namespace AtoCash.Controllers
             curPettyCashBal.EmployeeId = empid;
             curPettyCashBal.UpdatedOn = DateTime.Now;
             _context.Update(curPettyCashBal);
+
+            await _context.SaveChangesAsync();
             #endregion
 
             //##### 2. Adding entry to PettyCashRequest table for record
@@ -694,7 +696,7 @@ namespace AtoCash.Controllers
             curPettyCashBal.EmployeeId = reqEmpid;
             curPettyCashBal.UpdatedOn = DateTime.Now;
             _context.Update(curPettyCashBal);
-
+            await _context.SaveChangesAsync();
             #endregion
 
             //##### 2. Adding entry to PettyCashRequest table for record
@@ -811,14 +813,9 @@ namespace AtoCash.Controllers
 
 
                     _context.ClaimApprovalStatusTrackers.Add(claimAppStatusTrack);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw;
-                    }
+
+                    await _context.SaveChangesAsync();
+
 
 
                     if (isFirstApprover)

@@ -81,15 +81,15 @@ namespace AtoCash.Models
         public Double TotalClaimAmount { get; set; }
         public DateTime ExpReimReqDate { get; set; }
 
-        public string Department { get; set; }
+        public string DepartmentName { get; set; }
         public int? DepartmentId { get; set; }
-        public string Project { get; set; }
+        public string ProjectName { get; set; }
         public int? ProjectId { get; set; }
 
-        public string SubProject { get; set; }
+        public string SubProjectName { get; set; }
         public int? SubProjectId { get; set; }
 
-        public string WorkTask { get; set; }
+        public string WorkTaskName { get; set; }
         public int? WorkTaskId { get; set; }
         public int ApprovalStatusTypeId { get; set; }
         public string ApprovalStatusType { get; set; }
@@ -106,48 +106,6 @@ namespace AtoCash.Models
 
         public string Comments { get; set; }
 
-
-
-
-
-
-
-        //public int Id { get; set; }
-        //public string EmployeeName { get; set; }
-        //public int EmployeeId { get; set; }
-
-        //public Double ExpenseReimbClaimAmount { get; set; }
-
-        //public string Documents { get; set; }
-
-        //public DateTime ExpReimReqDate { get; set; }
-
-        //public string InvoiceNo { get; set; }
-
-        //public DateTime InvoiceDate { get; set; }
-
-        //public string Vendor { get; set; }
-
-        //public string Location { get; set; }
-        //public string Description { get; set; }
-
-        ////Foreign Key Relationsions
-
-        //public int CurrencyTypeId { get; set; }
-        //public string CurrencyType { get; set; }
-
-        //public string Department { get; set; }
-        //public int? DepartmentId { get; set; }
-        //public string Project { get; set; }
-        //public int? ProjectId { get; set; }
-
-        //public string SubProject { get; set; }
-        //public int? SubProjectId { get; set; }
-        //public string WorkTask { get; set; }
-        //public int? WorkTaskId { get; set; }
-        //public string ApprovalStatusType { get; set; }
-        //public int ApprovalStatusTypeId { get; set; }
-        //public DateTime? ApprovedDate { get; set; }
 
     }
 }

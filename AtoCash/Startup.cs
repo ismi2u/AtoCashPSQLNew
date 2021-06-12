@@ -136,8 +136,7 @@ namespace AtoCash
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, @"Images")),
                 RequestPath = "/app/Images"
             });
-
-
+ 
             app.UseHttpsRedirection();
             app.UseCors("myCorsPolicy");
             app.UseRouting();

@@ -60,16 +60,16 @@ namespace AtoCash.Controllers
                     TotalClaimAmount = expenseReimbRequest.TotalClaimAmount,
 
                     DepartmentId = expenseReimbRequest.DepartmentId,
-                    Department = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null,
+                    DepartmentName = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null,
 
                     ProjectId = expenseReimbRequest.ProjectId,
-                    Project = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null,
+                    ProjectName = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null,
 
                     SubProjectId = expenseReimbRequest.SubProjectId,
-                    SubProject = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null,
+                    SubProjectName = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null,
 
                     WorkTaskId = expenseReimbRequest.WorkTaskId,
-                    WorkTask = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null,
+                    WorkTaskName = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null,
 
                     ExpReimReqDate = expenseReimbRequest.ExpReimReqDate,
                     ApprovedDate = expenseReimbRequest.ApprovedDate,
@@ -113,16 +113,16 @@ namespace AtoCash.Controllers
                 TotalClaimAmount = expenseReimbRequest.TotalClaimAmount,
 
                 DepartmentId = expenseReimbRequest.DepartmentId,
-                Department = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null,
+                DepartmentName = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null,
 
                 ProjectId = expenseReimbRequest.ProjectId,
-                Project = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null,
+                ProjectName = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null,
 
                 SubProjectId = expenseReimbRequest.SubProjectId,
-                SubProject = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null,
+                SubProjectName = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null,
 
                 WorkTaskId = expenseReimbRequest.WorkTaskId,
-                WorkTask = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null,
+                WorkTaskName = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null,
 
                 ExpReimReqDate = expenseReimbRequest.ExpReimReqDate,
                 ApprovedDate = expenseReimbRequest.ApprovedDate,
@@ -178,16 +178,16 @@ namespace AtoCash.Controllers
                     expenseReimburseRequestDTO.TotalClaimAmount = expenseReimbRequest.TotalClaimAmount;
 
                     expenseReimburseRequestDTO.DepartmentId = expenseReimbRequest.DepartmentId;
-                    expenseReimburseRequestDTO.Department = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null;
+                    expenseReimburseRequestDTO.DepartmentName = expenseReimbRequest.DepartmentId != null ? _context.Departments.Find(expenseReimbRequest.DepartmentId).DeptName : null;
 
                     expenseReimburseRequestDTO.ProjectId = expenseReimbRequest.ProjectId;
-                    expenseReimburseRequestDTO.Project = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null;
+                    expenseReimburseRequestDTO.ProjectName = expenseReimbRequest.ProjectId != null ? _context.Projects.Find(expenseReimbRequest.ProjectId).ProjectName : null;
 
                     expenseReimburseRequestDTO.SubProjectId = expenseReimbRequest.SubProjectId;
-                    expenseReimburseRequestDTO.SubProject = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null;
+                    expenseReimburseRequestDTO.SubProjectName = expenseReimbRequest.SubProjectId != null ? _context.SubProjects.Find(expenseReimbRequest.SubProjectId).SubProjectName : null;
 
                     expenseReimburseRequestDTO.WorkTaskId = expenseReimbRequest.WorkTaskId;
-                    expenseReimburseRequestDTO.WorkTask = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null;
+                    expenseReimburseRequestDTO.WorkTaskName = expenseReimbRequest.WorkTaskId != null ? _context.WorkTasks.Find(expenseReimbRequest.WorkTaskId).TaskName : null;
 
                     expenseReimburseRequestDTO.ExpReimReqDate = expenseReimbRequest.ExpReimReqDate;
                     expenseReimburseRequestDTO.ApprovedDate = expenseReimbRequest.ApprovedDate;

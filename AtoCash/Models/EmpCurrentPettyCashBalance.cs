@@ -47,7 +47,7 @@ namespace AtoCash.Models
         public Double CurBalance { get; set; }
         public Double CashInHand { get; set; }
 
-        public Double TotalAmountToCredit { get; set; }
+        public Double PendingApproval { get; set; }
         public Double TotalAmountToWallet { get; set; }
         public DateTime WalletBalLastUpdated { get; set; }
 

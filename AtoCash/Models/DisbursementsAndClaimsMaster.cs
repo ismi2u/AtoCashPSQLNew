@@ -120,7 +120,7 @@ namespace AtoCash.Models
 
         public string WorkTaskName { get; set; }
         public int? WorkTaskId { get; set; }
-        public DateTime RecordDate { get; set; }
+        public string RecordDate { get; set; }
 
         public int CurrencyTypeId { get; set; }
 
@@ -132,7 +132,7 @@ namespace AtoCash.Models
 
 
         public bool IsSettledAmountCredited { get; set; }
-        public DateTime? SettledDate { get; set; }
+        public string SettledDate { get; set; }
         public string SettlementComment { get; set; }
 
         public string SettlementAccount { get; set; }
