@@ -504,11 +504,12 @@ namespace AtoCash.Controllers
                 travelApprovalStatusTracker.ApprovalLevelId = 2; // default approval level is 2 for Project based request
                 travelApprovalStatusTracker.ReqDate = DateTime.Now;
                 travelApprovalStatusTracker.FinalApprovedDate = DateTime.Now;
-                travelApprovalStatusTracker.ApprovalStatusTypeId = (int)EApprovalStatus.Approved; //1-Initiating; 2-Pending; 3-InReview; 4-Approved; 5-Rejected
                 travelApprovalStatusTracker.Comments = "Travel Request is Self Approved!";
+                travelApprovalStatusTracker.ApprovalStatusTypeId = (int)EApprovalStatus.Approved; //status tracker
+
 
                 _context.TravelApprovalStatusTrackers.Add(travelApprovalStatusTracker);
-                travelApprovalRequest.ApprovalStatusTypeId = (int)EApprovalStatus.Approved;
+                travelApprovalRequest.ApprovalStatusTypeId = (int)EApprovalStatus.Approved;  //1-Initiating; 2-Pending; 3-InReview; 4-Approved; 5-Rejected
                 travelApprovalRequest.Comments = "Approved";
                 _context.TravelApprovalRequests.Update(travelApprovalRequest);
                 await _context.SaveChangesAsync();
@@ -530,11 +531,13 @@ namespace AtoCash.Controllers
                 travelApprovalStatusTracker.FinalApprovedDate = null;
                 travelApprovalStatusTracker.ApprovalStatusTypeId = (int)EApprovalStatus.Pending; //1-Initiating, 2-Pending, 3-InReview, 4-Approved, 5-Rejected
                 travelApprovalStatusTracker.Comments = "Travel Request in Proceess";
+
+                _context.TravelApprovalStatusTrackers.Add(travelApprovalStatusTracker);
             }
 
 
 
-            _context.TravelApprovalStatusTrackers.Add(travelApprovalStatusTracker);
+           
 
             try
             {

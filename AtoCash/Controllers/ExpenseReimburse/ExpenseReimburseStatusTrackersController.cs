@@ -127,8 +127,8 @@ namespace AtoCash.Controllers.ExpenseReimburse
                                     r.ApprovalGroupId == apprGroupId &&
                                     r.ApprovalStatusTypeId == (int)EApprovalStatus.Pending
                                     || r.JobRoleId == jobRoleid &&
-                                    r.ProjManagerId ==id &&
-                                    r.ApprovalStatusTypeId == (int)EApprovalStatus.Pending ).ToList();
+                                    r.ProjManagerId == id &&
+                                    r.ApprovalStatusTypeId == (int)EApprovalStatus.Pending).ToList();
 
             List<ExpenseReimburseStatusTrackerDTO> ListExpenseReimburseStatusTrackerDTO = new();
 
@@ -136,23 +136,23 @@ namespace AtoCash.Controllers.ExpenseReimburse
             {
                 ExpenseReimburseStatusTrackerDTO expenseReimburseStatusTrackerDTO = new();
 
-                    expenseReimburseStatusTrackerDTO.Id = expenseReimburseStatusTracker.Id;
-                    expenseReimburseStatusTrackerDTO.EmployeeId = expenseReimburseStatusTracker.EmployeeId;
-                    expenseReimburseStatusTrackerDTO.EmployeeName = _context.Employees.Find(expenseReimburseStatusTracker.EmployeeId).GetFullName();
-                    expenseReimburseStatusTrackerDTO.ExpenseReimburseRequestId = expenseReimburseStatusTracker.ExpenseReimburseRequestId;
-                    expenseReimburseStatusTrackerDTO.DepartmentId = expenseReimburseStatusTracker.DepartmentId;
-                    expenseReimburseStatusTrackerDTO.TotalClaimAmount = expenseReimburseStatusTracker.TotalClaimAmount;
-                    expenseReimburseStatusTrackerDTO.Department = expenseReimburseStatusTracker.DepartmentId != null ? _context.Departments.Find(expenseReimburseStatusTracker.DepartmentId).DeptName : null;
-                    expenseReimburseStatusTrackerDTO.ProjectId = expenseReimburseStatusTracker.ProjectId;
-                    expenseReimburseStatusTrackerDTO.Project = expenseReimburseStatusTracker.ProjectId != null ? _context.Projects.Find(expenseReimburseStatusTracker.ProjectId).ProjectName : null;
-                    expenseReimburseStatusTrackerDTO.JobRoleId = expenseReimburseStatusTracker.JobRoleId;
-                    expenseReimburseStatusTrackerDTO.JobRole = _context.JobRoles.Find(expenseReimburseStatusTracker.JobRoleId).RoleName;
-                    expenseReimburseStatusTrackerDTO.ApprovalLevelId = expenseReimburseStatusTracker.ApprovalLevelId;
-                    expenseReimburseStatusTrackerDTO.ExpReimReqDate = expenseReimburseStatusTracker.ExpReimReqDate;
-                    expenseReimburseStatusTrackerDTO.ApprovedDate = expenseReimburseStatusTracker.ApprovedDate;
-                    expenseReimburseStatusTrackerDTO.ApprovalStatusTypeId = expenseReimburseStatusTracker.ApprovalStatusTypeId;
-                   expenseReimburseStatusTrackerDTO.ApprovalStatusType = _context.ApprovalStatusTypes.Find(expenseReimburseStatusTracker.ApprovalStatusTypeId).Status;
-                   expenseReimburseStatusTrackerDTO.Comments = expenseReimburseStatusTracker.Comments;
+                expenseReimburseStatusTrackerDTO.Id = expenseReimburseStatusTracker.Id;
+                expenseReimburseStatusTrackerDTO.EmployeeId = expenseReimburseStatusTracker.EmployeeId;
+                expenseReimburseStatusTrackerDTO.EmployeeName = _context.Employees.Find(expenseReimburseStatusTracker.EmployeeId).GetFullName();
+                expenseReimburseStatusTrackerDTO.ExpenseReimburseRequestId = expenseReimburseStatusTracker.ExpenseReimburseRequestId;
+                expenseReimburseStatusTrackerDTO.DepartmentId = expenseReimburseStatusTracker.DepartmentId;
+                expenseReimburseStatusTrackerDTO.TotalClaimAmount = expenseReimburseStatusTracker.TotalClaimAmount;
+                expenseReimburseStatusTrackerDTO.Department = expenseReimburseStatusTracker.DepartmentId != null ? _context.Departments.Find(expenseReimburseStatusTracker.DepartmentId).DeptName : null;
+                expenseReimburseStatusTrackerDTO.ProjectId = expenseReimburseStatusTracker.ProjectId;
+                expenseReimburseStatusTrackerDTO.Project = expenseReimburseStatusTracker.ProjectId != null ? _context.Projects.Find(expenseReimburseStatusTracker.ProjectId).ProjectName : null;
+                expenseReimburseStatusTrackerDTO.JobRoleId = expenseReimburseStatusTracker.JobRoleId;
+                expenseReimburseStatusTrackerDTO.JobRole = _context.JobRoles.Find(expenseReimburseStatusTracker.JobRoleId).RoleName;
+                expenseReimburseStatusTrackerDTO.ApprovalLevelId = expenseReimburseStatusTracker.ApprovalLevelId;
+                expenseReimburseStatusTrackerDTO.ExpReimReqDate = expenseReimburseStatusTracker.ExpReimReqDate;
+                expenseReimburseStatusTrackerDTO.ApprovedDate = expenseReimburseStatusTracker.ApprovedDate;
+                expenseReimburseStatusTrackerDTO.ApprovalStatusTypeId = expenseReimburseStatusTracker.ApprovalStatusTypeId;
+                expenseReimburseStatusTrackerDTO.ApprovalStatusType = _context.ApprovalStatusTypes.Find(expenseReimburseStatusTracker.ApprovalStatusTypeId).Status;
+                expenseReimburseStatusTrackerDTO.Comments = expenseReimburseStatusTracker.Comments;
 
 
                 ListExpenseReimburseStatusTrackerDTO.Add(expenseReimburseStatusTrackerDTO);
@@ -325,15 +325,15 @@ namespace AtoCash.Controllers.ExpenseReimburse
                                 disbAndClaimItem.AmountToCredit = 0;
                             }
 
-                            
+
                             disbAndClaimItem.ApprovalStatusId = (int)EApprovalStatus.Approved;
                             _context.Update(disbAndClaimItem);
 
 
                             //Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
-                            empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet??0;
+                            empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet ?? 0;
                             empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
-                           _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
+                            _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
 
                             ///
                         }
@@ -383,7 +383,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
                               .Where(t => t.ExpenseReimburseRequestId == expenseReimburseStatusTrackerDto.ExpenseReimburseRequestId &&
                               t.ApprovalStatusTypeId == (int)EApprovalStatus.Pending).Count();
 
-                    if ( pendingApprovals == 0)
+                    if (pendingApprovals == 0)
                     {
                         var expReimbReq = _context.ExpenseReimburseRequests.Where(p => p.Id == expenseReimburseStatusTrackerDto.ExpenseReimburseRequestId).FirstOrDefault();
                         expReimbReq.ApprovalStatusTypeId = expenseReimburseStatusTrackerDto.ApprovalStatusTypeId;
@@ -403,6 +403,13 @@ namespace AtoCash.Controllers.ExpenseReimburse
                         expReimbReq.ApprovedDate = DateTime.Now;
                         expReimbReq.Comments = expenseReimburseStatusTrackerDto.Comments;
                         _context.ExpenseReimburseRequests.Update(expReimbReq);
+
+                        //DisbursementAndClaimsMaster update the record to Rejected (ApprovalStatusId = 5)
+                        int disbAndClaimItemId = _context.DisbursementsAndClaimsMasters.Where(d => d.ExpenseReimburseReqId == expReimbReq.Id).FirstOrDefault().Id;
+                        var disbAndClaimItem = await _context.DisbursementsAndClaimsMasters.FindAsync(disbAndClaimItemId);
+
+                        disbAndClaimItem.ApprovalStatusId = (int)EApprovalStatus.Rejected;
+                        _context.Update(disbAndClaimItem);
                         await _context.SaveChangesAsync();
                     }
 
@@ -443,7 +450,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
                         disbAndClaimItem.AmountToCredit = 0;
                     }
 
-                    
+
                     disbAndClaimItem.ApprovalStatusId = bRejectMessage ? (int)EApprovalStatus.Rejected : (int)EApprovalStatus.Approved;
                     _context.Update(disbAndClaimItem);
 
@@ -461,7 +468,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
                     var expenseReimReq = await _context.ExpenseReimburseRequests.FindAsync(expenseReimReqId);
 
                     expenseReimReq.ApprovalStatusTypeId = bRejectMessage ? (int)EApprovalStatus.Rejected : (int)EApprovalStatus.Approved;
-                    expenseReimReq.Comments =  bRejectMessage? expenseReimburseStatusTrackerDto.Comments: "Approved";
+                    expenseReimReq.Comments = bRejectMessage ? expenseReimburseStatusTrackerDto.Comments : "Approved";
                     expenseReimReq.ApprovedDate = DateTime.Now;
                     _context.Update(expenseReimReq);
 
@@ -470,14 +477,8 @@ namespace AtoCash.Controllers.ExpenseReimburse
                 _context.ExpenseReimburseStatusTrackers.Update(expenseReimburseStatusTracker);
             }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
+            await _context.SaveChangesAsync();
+
 
 
             RespStatus respStatus = new();
@@ -494,7 +495,7 @@ namespace AtoCash.Controllers.ExpenseReimburse
             }
 
             return Ok(respStatus);
-           
+
         }
 
         // POST: api/ExpenseReimburseStatusTrackers

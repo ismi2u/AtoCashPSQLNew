@@ -1060,11 +1060,11 @@ namespace AtoCash.Controllers
 
             if (predicate.IsStarted)
             {
-                result = _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
+                result = _context.DisbursementsAndClaimsMasters.Where(predicate).OrderByDescending(x => x.RecordDate).ToList();
             }
             else
             {
-                result = _context.DisbursementsAndClaimsMasters.ToList();
+                result = _context.DisbursementsAndClaimsMasters.OrderByDescending(x => x.RecordDate).ToList();
             }
 
 
@@ -1106,7 +1106,7 @@ namespace AtoCash.Controllers
 
             }
 
-            return Ok(ListDisbursementsAndClaimsMasterDTO.OrderByDescending(x => x.SettledDate).ToList());
+            return Ok(ListDisbursementsAndClaimsMasterDTO);
         }
 
         // GET: api/DisbursementsAndClaimsMasters
@@ -1138,11 +1138,11 @@ namespace AtoCash.Controllers
 
             if (predicate.IsStarted)
             {
-                result = _context.DisbursementsAndClaimsMasters.Where(predicate).ToList();
+                result = _context.DisbursementsAndClaimsMasters.Where(predicate).OrderByDescending(x => x.RecordDate).ToList();
             }
             else
             {
-                result = _context.DisbursementsAndClaimsMasters.ToList();
+                result = _context.DisbursementsAndClaimsMasters.OrderByDescending(x => x.RecordDate).ToList();
             }
 
 

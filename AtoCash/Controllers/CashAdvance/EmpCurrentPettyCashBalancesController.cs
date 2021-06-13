@@ -95,10 +95,23 @@ namespace AtoCash.Controllers
                 empAllCurBalStatusDTO.CurBalance = empCurrentPettyCashBalance.CurBalance;
                 empAllCurBalStatusDTO.MaxLimit = _context.JobRoles.Find(_context.Employees.Find(id).RoleId).MaxPettyCashAllowed;
 
-                empAllCurBalStatusDTO.CashInHand = _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id  && d.IsSettledAmountCredited == false && d.PettyCashRequestId != null && d.ApprovalStatusId == (int)EApprovalStatus.Approved)
-                                                        .Select(s => s.ClaimAmount).Sum();
 
-                empAllCurBalStatusDTO.PendingApproval= _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false && d.PettyCashRequestId != null && d.ApprovalStatusId == (int)EApprovalStatus.Pending)
+                //condition to check  the cash-in-hand and set it to Zero '0'
+                double empCurPettyBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == id).FirstOrDefault().CurBalance;
+
+                if (empAllCurBalStatusDTO.MaxLimit == empCurPettyBalance) // max petty cash litmi is equal to CurPettyCash Balance
+                {
+                    empAllCurBalStatusDTO.CashInHand = 0;
+                }
+                else
+                {
+                    empAllCurBalStatusDTO.CashInHand = _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false && d.ApprovalStatusId == (int)EApprovalStatus.Approved)
+                                                        .Select(s => s.ClaimAmount).Sum();
+                }
+
+                
+
+                empAllCurBalStatusDTO.PendingApproval= _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false  && d.ApprovalStatusId == (int)EApprovalStatus.Pending)
                                                         .Select(s => s.ClaimAmount).Sum();
 
                    empAllCurBalStatusDTO.WalletBalLastUpdated = empCurrentPettyCashBalance.UpdatedOn;

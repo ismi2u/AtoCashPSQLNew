@@ -106,7 +106,7 @@ namespace AtoCash.Controllers
             pettyCashRequestDTO.ApprovedDate = pettyCashRequest.ApprovedDate;
 
             pettyCashRequestDTO.CreditToBank = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToCredit : 0;
-            pettyCashRequestDTO.IsSettled = !(disbAndClaim.IsSettledAmountCredited ?? false);
+            pettyCashRequestDTO.IsSettled = (disbAndClaim.IsSettledAmountCredited ?? false);
 
             pettyCashRequestDTO.Comments = pettyCashRequest.Comments;
 

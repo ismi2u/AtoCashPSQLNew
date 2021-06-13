@@ -133,7 +133,7 @@ namespace AtoCash.Controllers
 
                 CreditToBank = disbAndClaim.IsSettledAmountCredited?? false ? disbAndClaim.AmountToCredit: 0,
                 CreditToWallet = disbAndClaim.IsSettledAmountCredited ?? false ? disbAndClaim.AmountToWallet : 0,
-                IsSettled = !(disbAndClaim.IsSettledAmountCredited ?? false)
+                IsSettled = disbAndClaim.IsSettledAmountCredited ?? false
 
             };
             return expenseReimburseRequestDTO;
@@ -793,6 +793,7 @@ namespace AtoCash.Controllers
 
                 //get expensereimburserequestId from the saved record and then use here for sub-claims
                 expenseSubClaim.ExpenseReimburseRequestId = expenseReimburseRequest.Id;
+                expenseSubClaim.EmployeeId = expenseReimburseRequestDto.EmployeeId;
                 expenseSubClaim.ExpenseTypeId = expenseSubClaimDto.ExpenseTypeId;
                 expenseSubClaim.ExpenseReimbClaimAmount = expenseSubClaimDto.ExpenseReimbClaimAmount;
                 expenseSubClaim.DocumentIDs = expenseSubClaimDto.DocumentIDs;

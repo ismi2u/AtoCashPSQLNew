@@ -544,7 +544,7 @@ namespace AtoCash.Controllers
 
 
 
-            var claimRequestTracks = _context.ClaimApprovalStatusTrackers.Where(c => c.PettyCashRequestId == id).ToList().OrderBy(x=> x.RoleId);
+            var claimRequestTracks = _context.ClaimApprovalStatusTrackers.Where(c => c.PettyCashRequestId == id).OrderBy(x=> x.RoleId).ToList();
 
             if (claimRequestTracks == null)
             {
