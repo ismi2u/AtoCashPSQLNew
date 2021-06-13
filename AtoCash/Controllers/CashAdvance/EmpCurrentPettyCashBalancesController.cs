@@ -97,19 +97,15 @@ namespace AtoCash.Controllers
 
 
                 //condition to check  the cash-in-hand and set it to Zero '0'
-                double empCurPettyBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == id).FirstOrDefault().CurBalance;
+                EmpCurrentPettyCashBalance empCurPettyBalance = _context.EmpCurrentPettyCashBalances.Where(e => e.EmployeeId == id).FirstOrDefault();
 
-                if (empAllCurBalStatusDTO.MaxLimit == empCurPettyBalance) // max petty cash litmi is equal to CurPettyCash Balance
-                {
-                    empAllCurBalStatusDTO.CashInHand = 0;
-                }
-                else
-                {
-                    empAllCurBalStatusDTO.CashInHand = _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false && d.ApprovalStatusId == (int)EApprovalStatus.Approved)
-                                                        .Select(s => s.ClaimAmount).Sum();
-                }
+                empAllCurBalStatusDTO.CashInHand = empCurPettyBalance.CashOnHand;
 
-                
+                empAllCurBalStatusDTO.CurBalance = empCurPettyBalance.CurBalance;
+
+
+                empAllCurBalStatusDTO.PendingSettlement = _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false && d.ApprovalStatusId == (int)EApprovalStatus.Approved)
+                                                        .Select(s => s.AmountToCredit ?? 0).Sum();
 
                 empAllCurBalStatusDTO.PendingApproval= _context.DisbursementsAndClaimsMasters.Where(d => d.EmployeeId == id && d.IsSettledAmountCredited == false  && d.ApprovalStatusId == (int)EApprovalStatus.Pending)
                                                         .Select(s => s.ClaimAmount).Sum();
@@ -169,6 +165,7 @@ namespace AtoCash.Controllers
                 Id = empCurrentPettyCashBalanceDto.Id,
                 EmployeeId = empCurrentPettyCashBalanceDto.EmployeeId,
                 CurBalance = empCurrentPettyCashBalanceDto.CurBalance,
+                CashOnHand = 0,
                 UpdatedOn = empCurrentPettyCashBalanceDto.UpdatedOn
             };
 
@@ -204,6 +201,7 @@ namespace AtoCash.Controllers
                     {
                         EmployeeId = id,
                         CurBalance = empPettyCashAmountEligible,
+                        CashOnHand = 0,
                         UpdatedOn = DateTime.Now
                     });
 

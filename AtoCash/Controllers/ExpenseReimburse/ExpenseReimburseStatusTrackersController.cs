@@ -331,9 +331,9 @@ namespace AtoCash.Controllers.ExpenseReimburse
 
 
                             //Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
-                            empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet ?? 0;
-                            empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
-                            _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
+                            //empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet ?? 0;
+                            //empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
+                            //_context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
 
                             ///
                         }
@@ -455,9 +455,9 @@ namespace AtoCash.Controllers.ExpenseReimburse
                     _context.Update(disbAndClaimItem);
 
 
-                    //Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
-                    empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet ?? 0;
-                    _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
+                    ////Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
+                    //empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbAndClaimItem.AmountToWallet ?? 0;
+                    //_context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
 
                     /////
                     ///

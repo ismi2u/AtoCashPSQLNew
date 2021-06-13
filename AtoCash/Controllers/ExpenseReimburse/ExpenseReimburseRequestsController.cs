@@ -726,10 +726,10 @@ namespace AtoCash.Controllers
                 _context.Update(disbursementsAndClaimsMaster);
 
 
-                //Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
-                empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbursementsAndClaimsMaster.AmountToWallet ?? 0;
-                empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
-                _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
+                //////Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
+                ////empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbursementsAndClaimsMaster.AmountToWallet ?? 0;
+                ////empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
+                ////_context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
 
                 await _context.DisbursementsAndClaimsMasters.AddAsync(disbursementsAndClaimsMaster);
                 await _context.SaveChangesAsync();
@@ -951,10 +951,10 @@ namespace AtoCash.Controllers
                 _context.Update(disbursementsAndClaimsMaster);
 
 
-                //Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
-                empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbursementsAndClaimsMaster.AmountToWallet ?? 0;
-                empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
-                _context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
+                //////Final Approveer hence update the EmpCurrentPettyCashBalance table for the employee to reflect the credit
+                ////empCurrentPettyCashBalance.CurBalance = empCurPettyBal + disbursementsAndClaimsMaster.AmountToWallet ?? 0;
+                ////empCurrentPettyCashBalance.UpdatedOn = DateTime.Now;
+                ////_context.EmpCurrentPettyCashBalances.Update(empCurrentPettyCashBalance);
 
                 await _context.DisbursementsAndClaimsMasters.AddAsync(disbursementsAndClaimsMaster);
                 await _context.SaveChangesAsync();

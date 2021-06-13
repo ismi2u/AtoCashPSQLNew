@@ -21,6 +21,9 @@ namespace AtoCash.Models
         [Required]
         
         public Double CurBalance { get; set; }
+        
+        [Required]
+        public Double CashOnHand { get; set; }
 
         [Required]
         public DateTime UpdatedOn   { get; set; }
@@ -48,7 +51,7 @@ namespace AtoCash.Models
         public Double CashInHand { get; set; }
 
         public Double PendingApproval { get; set; }
-        public Double TotalAmountToWallet { get; set; }
+        public Double PendingSettlement { get; set; }
         public DateTime WalletBalLastUpdated { get; set; }
 
     }

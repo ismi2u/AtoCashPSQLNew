@@ -584,7 +584,7 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.ApprovalStatusType = disb.ApprovalStatusId != 0 ? _context.ApprovalStatusTypes.Find(disb.ApprovalStatusId).Status : null;
                         disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate.ToShortDateString();
                         disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disb.IsSettledAmountCredited ?? false;
-                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ?  disb.SettledDate.Value.ToShortDateString() : string.Empty;
+                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ? disb.SettledDate.Value.ToShortDateString() : string.Empty;
                         disbursementsAndClaimsMasterDTO.SettlementComment = disb.SettlementComment;
 
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
@@ -709,7 +709,7 @@ namespace AtoCash.Controllers
                         disbursementsAndClaimsMasterDTO.ApprovalStatusType = disb.ApprovalStatusId != 0 ? _context.ApprovalStatusTypes.Find(disb.ApprovalStatusId).Status : null;
                         disbursementsAndClaimsMasterDTO.RecordDate = disb.RecordDate.ToShortDateString();
                         disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disb.IsSettledAmountCredited ?? false;
-                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ?  disb.SettledDate.Value.ToShortDateString() : string.Empty;
+                        disbursementsAndClaimsMasterDTO.SettledDate = disb.SettledDate != null ? disb.SettledDate.Value.ToShortDateString() : string.Empty;
                         disbursementsAndClaimsMasterDTO.SettlementComment = disb.SettlementComment;
                         disbursementsAndClaimsMasterDTO.SettlementAccount = disb.SettlementAccount;
                         disbursementsAndClaimsMasterDTO.SettlementBankCard = disb.SettlementBankCard;
@@ -1038,6 +1038,7 @@ namespace AtoCash.Controllers
         public async Task<ActionResult<IEnumerable<DisbursementsAndClaimsMasterDTO>>> AccountsPayableData(AccountsPayableSearchModel searchModel)
         {
 
+
             List<DisbursementsAndClaimsMaster> result = new();
             List<DisbursementsAndClaimsMasterDTO> ListDisbursementsAndClaimsMasterDTO = new();
 
@@ -1092,7 +1093,7 @@ namespace AtoCash.Controllers
                 disbursementsAndClaimsMasterDTO.AmountToWallet = disbursementsAndClaimsMaster.AmountToWallet;
                 disbursementsAndClaimsMasterDTO.AmountToCredit = disbursementsAndClaimsMaster.AmountToCredit;
                 disbursementsAndClaimsMasterDTO.IsSettledAmountCredited = disbursementsAndClaimsMaster.IsSettledAmountCredited ?? false;
-                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate!= null ? disbursementsAndClaimsMaster.SettledDate.Value.ToShortDateString() : string.Empty;
+                disbursementsAndClaimsMasterDTO.SettledDate = disbursementsAndClaimsMaster.SettledDate != null ? disbursementsAndClaimsMaster.SettledDate.Value.ToShortDateString() : string.Empty;
                 disbursementsAndClaimsMasterDTO.SettlementComment = disbursementsAndClaimsMaster.SettlementComment;
                 disbursementsAndClaimsMasterDTO.SettlementAccount = disbursementsAndClaimsMaster.SettlementAccount;
                 disbursementsAndClaimsMasterDTO.SettlementBankCard = disbursementsAndClaimsMaster.SettlementBankCard;
@@ -1257,12 +1258,24 @@ namespace AtoCash.Controllers
         [ActionName("ExpenseSubClaimsData")]
         public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsData(ExpenseSubClaimsSearchModel searchModel)
         {
+            int? empid = searchModel.EmpId;
+
+            if (empid == null)
+            {
+                return Conflict(new RespStatus() { Status = "Failure", Message = "Employee Id not valid" });
+            }
 
             List<ExpenseSubClaim> result = new();
             List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<ExpenseSubClaim>();
+
+            // particular employee may be manager or any reportee
+            if (empid != 0 && searchModel.IsManager == false)
+            {
+                predicate = predicate.And(x => x.EmployeeId == empid);
+            }
 
             if (searchModel.ExpenseTypeId != null && searchModel.ExpenseTypeId != 0)
                 predicate = predicate.And(x => x.ExpenseTypeId != searchModel.ExpenseTypeId);
@@ -1275,8 +1288,6 @@ namespace AtoCash.Controllers
             if (searchModel.CostCenterId != null && searchModel.CostCenterId != 0)
                 predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
 
-
-
             if (predicate.IsStarted)
             {
                 result = _context.ExpenseSubClaims.Where(predicate).ToList();
@@ -1286,6 +1297,13 @@ namespace AtoCash.Controllers
                 result = _context.ExpenseSubClaims.ToList();
             }
 
+            // all employees who report under the manager
+            if (empid != 0 && searchModel.IsManager == true)
+            {
+                var mgrDeptId = _context.Employees.Find(empid).DepartmentId;
+                List<int> mgrReportees = _context.Employees.Where(e => e.DepartmentId == mgrDeptId && e.Id != empid).Select(s => s.Id).ToList();
+                result = result.Where(r => mgrReportees.Contains(r.EmployeeId)).ToList();
+            }
 
             foreach (var expenseSubClaim in result)
             {
@@ -1341,12 +1359,24 @@ namespace AtoCash.Controllers
         [ActionName("ExpenseSubClaimsReport")]
         public async Task<ActionResult<IEnumerable<ExpenseSubClaimDTO>>> ExpenseSubClaimsReport(ExpenseSubClaimsSearchModel searchModel)
         {
+            int? empid = searchModel.EmpId;
+
+            if (empid == null)
+            {
+                return Conflict(new RespStatus() { Status = "Failure", Message = "Employee Id not valid" });
+            }
 
             List<ExpenseSubClaim> result = new();
             List<ExpenseSubClaimDTO> ListExpenseSubClaimDTO = new();
 
             //using predicate builder to add multiple filter cireteria
             var predicate = PredicateBuilder.New<ExpenseSubClaim>();
+
+            // particular employee may be manager or any reportee
+            if (empid != 0 && searchModel.IsManager == false)
+            {
+                predicate = predicate.And(x => x.EmployeeId == empid);
+            }
 
             if (searchModel.ExpenseTypeId != null && searchModel.ExpenseTypeId != 0)
                 predicate = predicate.And(x => x.ExpenseTypeId != searchModel.ExpenseTypeId);
@@ -1359,7 +1389,6 @@ namespace AtoCash.Controllers
             if (searchModel.CostCenterId != null && searchModel.CostCenterId != 0)
                 predicate = predicate.And(x => x.CostCenterId != searchModel.CostCenterId);
 
-
             if (predicate.IsStarted)
             {
                 result = _context.ExpenseSubClaims.Where(predicate).ToList();
@@ -1369,6 +1398,13 @@ namespace AtoCash.Controllers
                 result = _context.ExpenseSubClaims.ToList();
             }
 
+            // all employees who report under the manager
+            if (empid != 0 && searchModel.IsManager == true)
+            {
+                var mgrDeptId = _context.Employees.Find(empid).DepartmentId;
+                List<int> mgrReportees = _context.Employees.Where(e => e.DepartmentId == mgrDeptId && e.Id != empid).Select(s => s.Id).ToList();
+                result = result.Where(r => mgrReportees.Contains(r.EmployeeId)).ToList();
+            }
 
             foreach (var expenseSubClaim in result)
             {

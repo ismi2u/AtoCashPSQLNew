@@ -137,6 +137,34 @@ namespace AtoCash.Controllers
 
             var disbursementsAndClaimsMaster = await _context.DisbursementsAndClaimsMasters.FindAsync(id);
 
+            //check the Credit To Wallet and Credit to Bank details to adjust for CashOnhand in EmpCurrentPettyCashBalance.CashOnHand
+            double RoleMaxLimit = _context.JobRoles.Find(_context.Employees.Find(disbursementsAndClaimsMaster.EmployeeId).RoleId).MaxPettyCashAllowed;
+
+            double CreditToWallet = disbursementsAndClaimsMaster.AmountToWallet ?? 0;
+            EmpCurrentPettyCashBalance empPettyCashBal = await _context.EmpCurrentPettyCashBalances.FindAsync(disbursementsAndClaimsMaster.EmployeeId);
+
+            //if PettyCash Request then update the CashOnHand in EmpPettyCash Balances table
+
+            if(disbursementsAndClaimsMaster.PettyCashRequestId != null )
+            { 
+                empPettyCashBal.CashOnHand = empPettyCashBal.CashOnHand + disbursementsAndClaimsMaster.AmountToCredit ?? 0;
+                //empPettyCashBal.CurBalance = empPettyCashBal.CurBalance - empPettyCashBal.CashOnHand;
+                //empPettyCashBal.CurBalance = (empPettyCashBal.CurBalance - empPettyCashBal.CashOnHand) >= 0 ? (empPettyCashBal.CurBalance - empPettyCashBal.CashOnHand) : RoleMaxLimit;
+            }
+            else
+            {
+                empPettyCashBal.CashOnHand = (empPettyCashBal.CashOnHand - CreditToWallet) >= 0 ? empPettyCashBal.CashOnHand - CreditToWallet : 0;
+                empPettyCashBal.CurBalance = (empPettyCashBal.CurBalance + (disbursementsAndClaimsMaster.AmountToWallet ?? 0)) < RoleMaxLimit ? (empPettyCashBal.CurBalance + (disbursementsAndClaimsMaster.AmountToWallet ?? 0)) : RoleMaxLimit;
+            }
+            
+
+           
+            _context.Update(empPettyCashBal);
+
+
+
+
+
             disbursementsAndClaimsMaster.IsSettledAmountCredited = disbursementsAndClaimsMasterDTO.IsSettledAmountCredited;
             disbursementsAndClaimsMaster.SettledDate = DateTime.Now;
             disbursementsAndClaimsMaster.SettlementComment = disbursementsAndClaimsMasterDTO.SettlementComment;

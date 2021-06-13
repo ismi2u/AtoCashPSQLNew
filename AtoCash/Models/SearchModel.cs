@@ -10,7 +10,6 @@ namespace AtoCash.Models
     public class CashAndClaimRequestSearchModel
     {
         public int? EmpId { get; set; }
-
         public int? PettyCashRequestId { get; set; }
         public int? RequestTypeId { get; set; }
         public int? DepartmentId { get; set; }
@@ -38,6 +37,8 @@ namespace AtoCash.Models
         public bool? IsAccountSettled { get; set; }
         public DateTime? SettledAccountsFrom { get; set; }
         public DateTime? SettledAccountsTo { get; set; }
+
+   
     }
 
 
@@ -47,6 +48,7 @@ namespace AtoCash.Models
         public int? ExpenseTypeId { get; set; }
 
         public int? EmpId { get; set; }
+        public bool IsManager { get; set; }
         public double? ExpenseReimbClaimAmountFrom { get; set; }
         public double? ExpenseReimbClaimAmountTo { get; set; }
         public DateTime? RequestRaisedDateFrom { get; set; }

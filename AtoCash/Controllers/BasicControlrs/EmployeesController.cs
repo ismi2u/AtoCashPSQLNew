@@ -328,6 +328,7 @@ namespace AtoCash.Controllers
             {
                 EmployeeId = employee.Id,
                 CurBalance = empPettyCashAmountEligible,
+                CashOnHand = 0,
                 UpdatedOn = DateTime.Now
             });
 
